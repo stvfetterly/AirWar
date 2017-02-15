@@ -5,15 +5,19 @@
 #include "SFMLSoundProvider.h"
 #include "ServiceLocator.h"
 #include "Aircraft.h"
+//#include "WeaponsManager.h"
 
 //Initialize static variables
 Game::GameState Game::_gameState = Uninitialized;
 sf::RenderWindow Game::_mainWindow;
 GameObjectManager Game::_gameObjectManager;
+WeaponsManager Game::_weaponsManager;
+
 bool Game::_gunFire = true;
 bool Game::_music = true;
 Game::GameDifficulty Game::_difficulty = Game::Wannabe;
 bool Game::_constantMotion = true;
+
 
 
 //Starts the game
@@ -30,25 +34,8 @@ void Game::Start(void)
 	//Creates main window with specified resolution, 32 bit colour, and a title of AirWar!
 	_mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "AirWar!");
 	
-	//Create bank of laser beams hidden off screen
-/*	Laser* newLaser = new Laser(true, "Laser");
-	Laser* newLaser1 = new Laser(true, "Laser1");
-	Laser* newLaser2 = new Laser(true, "Laser2");
-	Laser* newLaser3 = new Laser(true, "Laser3");
-	Laser* newLaser4 = new Laser(true, "Laser4");
-	Laser* newLaser5 = new Laser(true, "Laser5");
-	newLaser->SetPosition(SCREEN_WIDTH * 2, SCREEN_WIDTH * 2);		//Hide the laser
-	newLaser1->SetPosition(SCREEN_WIDTH * 2, SCREEN_WIDTH * 2);		//Hide the laser
-	newLaser2->SetPosition(SCREEN_WIDTH * 2, SCREEN_WIDTH * 2);		//Hide the laser
-	newLaser3->SetPosition(SCREEN_WIDTH * 2, SCREEN_WIDTH * 2);		//Hide the laser
-	newLaser4->SetPosition(SCREEN_WIDTH * 2, SCREEN_WIDTH * 2);		//Hide the laser
-	newLaser5->SetPosition(SCREEN_WIDTH * 2, SCREEN_WIDTH * 2);		//Hide the laser
-	_gameObjectManager.Add("Laser", newLaser);
-	_gameObjectManager.Add("Laser2", newLaser1);
-	_gameObjectManager.Add("Laser3", newLaser2);
-	_gameObjectManager.Add("Laser4", newLaser3);
-	_gameObjectManager.Add("Laser5", newLaser4);
-	_gameObjectManager.Add("Laser5", newLaser5);*/
+
+
 
 /*	//Create score boards
 	Score* score1 = new Score();
@@ -75,19 +62,19 @@ void Game::Start(void)
 
 
 	//Create very fast, very light player aircraft
-	Aircraft* player1 = new Aircraft(Aircraft::Player, "images/aircraft/J31Yellow.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_LIGHT_AIRCRAFT_MASS, 500);
+	Aircraft* player1 = new Aircraft(Aircraft::Player, "images/aircraft/J31Yellow.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_LIGHT_AIRCRAFT_MASS, 500, WeaponsManager::SM_BULLET);
 	
 	//Create very slow, heavy player aircraft
-	Aircraft* player1b = new Aircraft(Aircraft::Player, "images/aircraft/J20Pink.png", Aircraft::VERY_SLOW_AIRCRAFT_SPEED, Aircraft::VERY_HEAVY_AIRCRAFT_MASS, 500);
+	Aircraft* player1b = new Aircraft(Aircraft::Player, "images/aircraft/J20Pink.png", Aircraft::VERY_SLOW_AIRCRAFT_SPEED, Aircraft::VERY_HEAVY_AIRCRAFT_MASS, 500, WeaponsManager::LG_MISSILE);
 
 	//Create normal speed, normal weight aircraft
-	Aircraft* player1c = new Aircraft(Aircraft::Player, "images/aircraft/F35red.png", Aircraft::AVG_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 500);
+	Aircraft* player1c = new Aircraft(Aircraft::Player, "images/aircraft/F35red.png", Aircraft::AVG_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 500, WeaponsManager::MED_MISSILE);
 
 	//Create very heavy, very fast aircraft
-	Aircraft* player1d = new Aircraft(Aircraft::Player, "images/aircraft/T50.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_HEAVY_AIRCRAFT_MASS, 500);
+	Aircraft* player1d = new Aircraft(Aircraft::Player, "images/aircraft/T50.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_HEAVY_AIRCRAFT_MASS, 500, WeaponsManager::LG_LASER);
 
 	//Create light, fast aircraft
-	Aircraft* player1e = new Aircraft(Aircraft::Player, "images/aircraft/F22orange.png", Aircraft::FAST_AIRCRAFT_SPEED, Aircraft::LIGHT_AIRCRAFT_MASS, 500);
+	Aircraft* player1e = new Aircraft(Aircraft::Player, "images/aircraft/F22orange.png", Aircraft::FAST_AIRCRAFT_SPEED, Aircraft::LIGHT_AIRCRAFT_MASS, 500, WeaponsManager::MED_BOMB);
 
 	player1->SetPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
 	player1b->SetPosition(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2);
@@ -329,5 +316,10 @@ const sf::Event Game::GetInput()
 const GameObjectManager& Game::GetGameObjectManager()
 {
 	return Game::_gameObjectManager;
+}
+
+WeaponsManager& Game::GetWeaponsManager()
+{
+	return Game::_weaponsManager;
 }
 

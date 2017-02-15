@@ -4,7 +4,7 @@
 int VisibleGameObject::numObjects = 0;
 
 //Default constructor - initialize variables
-VisibleGameObject::VisibleGameObject() : _isLoaded(false), _filename(""), _isPaused(false)
+VisibleGameObject::VisibleGameObject() : _isLoaded(false), _filename(""), _isPaused(false), _xVelocity(0.0), _yVelocity(0.0), _visible(true)
 {
 	_name = "VisibleGameObject" + std::to_string(numObjects);
 	numObjects++;

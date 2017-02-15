@@ -1,5 +1,6 @@
 #pragma once
 #include "VisibleGameObject.h"
+#include "WeaponsManager.h"
 
 class Aircraft : public VisibleGameObject
 {
@@ -26,11 +27,9 @@ public:
 
 	enum ControlType { Player, AIEnemy, AIWingman };
 	
-	Aircraft(ControlType type, const std::string& image, float maxVelocity, float mass, float health);
-	virtual ~Aircraft();
+	Aircraft(ControlType type, const std::string& image, float maxVelocity, float mass, float health, WeaponsManager::WeaponType weaponType);
 
-	float GetXVelocity(float angle) const;
-	float GetYVelocity(float angle) const;
+	virtual ~Aircraft();
 
 	ControlType GetType() { return _type; }
 
@@ -42,8 +41,6 @@ public:
 	void Update(const float& elapsedTime);			//Updates plane position
 
 private:
-	float _xVelocity;		//positive = right, negative = left
-	float _yVelocity;		//positive = down, negative = up
 	float _maxVelocity;		//maximum speed of this aircraft
 	float _stun;			//keeps track of amount of time left until plane can move again
 	float _autoFire;		//keeps track of amount of time left until AI should fire again
@@ -52,6 +49,7 @@ private:
 	float _rateOfFire;		//Used to set the rate of fire
 
 	ControlType _type;		//is this plane AI, or user controlled
+	WeaponsManager::WeaponType _weaponType;		//Keeps track of the type of weapon that this plane is using
 
 	void UpdateManual(const float& elapsedTime);
 	virtual void UpdateAuto(const float& elapsedTime);

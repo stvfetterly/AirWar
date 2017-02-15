@@ -1,13 +1,13 @@
 #include "stdafx.h"
 #include "Aircraft.h"
-#include "Missile.h"
+#include "Weapon.h"
 #include "Game.h"
 
-const float Aircraft::VERY_FAST_FIRING_RATE = 0.03f;
-const float Aircraft::FAST_FIRING_RATE = 0.1f;
-const float Aircraft::AVG_FIRING_RATE = 0.25f;
-const float Aircraft::SLOW_FIRING_RATE = 0.5f;
-const float Aircraft::VERY_SLOW_FIRING_RATE = 0.75f;
+const float Aircraft::VERY_FAST_FIRING_RATE = 0.1f;
+const float Aircraft::FAST_FIRING_RATE = 0.25f;
+const float Aircraft::AVG_FIRING_RATE = 0.5f;
+const float Aircraft::SLOW_FIRING_RATE = 1.0f;
+const float Aircraft::VERY_SLOW_FIRING_RATE = 2.0f;
 
 const float Aircraft::VERY_FAST_AIRCRAFT_SPEED = 1400.0f;
 const float Aircraft::FAST_AIRCRAFT_SPEED = 1200.0f;
@@ -23,8 +23,13 @@ const float Aircraft::VERY_LIGHT_AIRCRAFT_MASS = 2;
 
 int Aircraft::numAircraft = 0;
 
-Aircraft::Aircraft(ControlType type, const std::string& image, float maxVelocity, float mass, float health):
-	_xVelocity(0.0f), _yVelocity(0.0f) ,_stun(0.0f), _autoFire(0.0f), _rateOfFire(AVG_FIRING_RATE)
+Aircraft::Aircraft(ControlType type, 
+				   const std::string& image,
+	               float maxVelocity,
+	               float mass, 
+	               float health,
+	               WeaponsManager::WeaponType weaponType):
+	_stun(0.0f), _autoFire(0.0f), _rateOfFire(AVG_FIRING_RATE), _weaponType(weaponType)
 {
 	_type = type;
 	_maxVelocity = maxVelocity;
@@ -53,17 +58,12 @@ Aircraft::~Aircraft()
 //Plane actions
 void Aircraft::Fire(const float& elapsedTime)
 {
-	/*
-	//Create missile at current plane location
-	Missile* newMissile = new Missile(0.0f, -1200.0f);
-	newMissile->SetPosition(this->GetPosition().x, this->GetPosition().y);
-
-	const_cast<GameObjectManager&>(Game::GetGameObjectManager()).Add(newMissile);
-	*/
-
 	//Grab next available missile, set to current location
-
+	VisibleGameObject* missile = Game::GetWeaponsManager().GetWeapon(_weaponType);
+	missile->SetPosition(this->GetPosition().x, this->GetPosition().y);
+	missile->SetYVelocity(-1200.0f);
 }
+
 void Aircraft::Damage(float damageAmount)
 {
 	_health -= damageAmount;
@@ -71,10 +71,12 @@ void Aircraft::Damage(float damageAmount)
 	if (_health < 0)
 		Explode();
 }
+
 void Aircraft::Stun(float stunTime)
 {
 	_stun = stunTime;
 }
+
 void Aircraft::Explode()
 {
 	//If this aircraft is player controlled, restart game and return to menu
@@ -187,9 +189,6 @@ void Aircraft::UpdateManual(const float& elapsedTime)
 		_yVelocity = _maxVelocity;
 	else if (_yVelocity < -_maxVelocity)
 		_yVelocity = -_maxVelocity;
-
-
-
 
 
 

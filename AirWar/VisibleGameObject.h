@@ -24,10 +24,23 @@ public:
 	virtual bool IsPaused() const { return _isPaused; }
 	virtual void Pause(bool newVal) { _isPaused = newVal; }
 
+	virtual float GetXVelocity() { return _xVelocity; }
+	virtual void SetXVelocity(const float& newVelocity) { _xVelocity = newVelocity; }
+	virtual float GetYVelocity() { return _yVelocity; }
+	virtual void SetYVelocity(const float& newVelocity) { _yVelocity = newVelocity; }
+
+	bool IsVisible() { return _visible; }
+	void SetVisible(bool visible) { _visible = visible; }
+	
+
 protected:
 	sf::Sprite& GetSprite();
 	bool _isPaused;
 	std::string _name;			//Name of object
+
+	float _xVelocity;		//positive = right, negative = left
+	float _yVelocity;		//positive = down, negative = up
+
 
 private:
 	static int numObjects;
@@ -36,4 +49,5 @@ private:
 	sf::Texture _image;
 	std::string _filename;
 	bool _isLoaded;
+	bool _visible;
 };

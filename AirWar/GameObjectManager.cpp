@@ -56,7 +56,11 @@ void GameObjectManager::DrawAll(sf::RenderWindow& renderWindow)
 {
 	for (auto itr = _gameObjects.begin(); itr != _gameObjects.end(); ++itr)
 	{
-		itr->second->Draw(renderWindow);
+		//Don't waste time drawing stuff that's invisible
+		if (itr->second->IsVisible())
+		{
+			itr->second->Draw(renderWindow);
+		}
 	}
 }
 
@@ -74,13 +78,6 @@ void GameObjectManager::UpdateAll()
 			itr->second->Update(timeDelta);
 		}
 	}
-
-	//deletes all items contained in the deletion queue
-	for (auto itr = _deletionQueue.begin(); itr != _deletionQueue.end(); ++itr)
-	{
-		Remove(*itr);
-	}
-	_deletionQueue.clear();	//remove all items from the queue
 }
 
 void GameObjectManager::SetPause(bool pause)
@@ -96,9 +93,4 @@ void GameObjectManager::SetPause(bool pause)
 		//record that we've paused the game so we don't need to loop through everything again
 		_paused = pause;
 	}
-}
-
-void GameObjectManager::AddToDelQ(const std::string& name)
-{
-	_deletionQueue.push_back(name);
 }

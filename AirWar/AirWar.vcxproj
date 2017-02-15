@@ -151,7 +151,7 @@
     <ClInclude Include="IAudioProvider.h" />
     <ClInclude Include="Laser.h" />
     <ClInclude Include="MainMenuScreen.h" />
-    <ClInclude Include="Missile.h" />
+    <ClInclude Include="Weapon.h" />
     <ClInclude Include="Paddle.h" />
     <ClInclude Include="Score.h" />
     <ClInclude Include="ServiceLocator.h" />
@@ -161,6 +161,7 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="VisibleGameObject.h" />
+    <ClInclude Include="WeaponsManager.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Aircraft.cpp" />
@@ -170,7 +171,7 @@
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="Laser.cpp" />
     <ClCompile Include="MainMenuScreen.cpp" />
-    <ClCompile Include="Missile.cpp" />
+    <ClCompile Include="Weapon.cpp" />
     <ClCompile Include="Paddle.cpp" />
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="ServiceLocator.cpp" />
@@ -184,6 +185,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="VisibleGameObject.cpp" />
+    <ClCompile Include="WeaponsManager.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

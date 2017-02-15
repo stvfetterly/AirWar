@@ -21,6 +21,7 @@
 #include <SFML/Audio.hpp>
 
 #include <map>				//std::map data structure
+#include <vector>			//use vectors!
 #include <list>				//std::list data structure
 #include <iostream>			//allow cin/cout operations
 #include <cassert>			//allow for code assertions

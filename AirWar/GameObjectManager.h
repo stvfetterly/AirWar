@@ -8,25 +8,21 @@ public:
 	~GameObjectManager();
 
 	void Add(VisibleGameObject* gameObject);
-	void Remove(const std::string& name);						//If you wish to remove items during the update function, use the deletion queue
+	void Remove(const std::string& name);						
 	int GetObjectCount() const;
 	VisibleGameObject* Get(const std::string& name) const;
 	
 	void DrawAll(sf::RenderWindow& renderWindow);
-	void UpdateAll();											//Updates all objects, deletes anything added to the deletion queue
+	void UpdateAll();											
 	void SetPause(bool pause);
 	bool GetPause() { return _paused; }
-	void AddToDelQ(const std::string& name);
+
 
 private:
 	std::map<std::string, VisibleGameObject*> _gameObjects;
 	sf::Clock clock;
-	std::vector<std::string> _deletionQueue;					//holds the names of objects to be deleted at the end of the next update
-
-
-	bool _paused;
-
 	
+	bool _paused;
 
 	struct GameObjectDeallocator
 	{
