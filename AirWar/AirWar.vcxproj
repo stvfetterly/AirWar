@@ -151,8 +151,8 @@
     <ClInclude Include="IAudioProvider.h" />
     <ClInclude Include="Laser.h" />
     <ClInclude Include="MainMenuScreen.h" />
+    <ClInclude Include="PlaneSelectScreen.h" />
     <ClInclude Include="Weapon.h" />
-    <ClInclude Include="Paddle.h" />
     <ClInclude Include="Score.h" />
     <ClInclude Include="ServiceLocator.h" />
     <ClInclude Include="SFMLSoundProvider.h" />
@@ -171,8 +171,8 @@
     <ClCompile Include="GameObjectManager.cpp" />
     <ClCompile Include="Laser.cpp" />
     <ClCompile Include="MainMenuScreen.cpp" />
+    <ClCompile Include="PlaneSelectScreen.cpp" />
     <ClCompile Include="Weapon.cpp" />
-    <ClCompile Include="Paddle.cpp" />
     <ClCompile Include="Score.cpp" />
     <ClCompile Include="ServiceLocator.cpp" />
     <ClCompile Include="SFMLSoundProvider.cpp" />

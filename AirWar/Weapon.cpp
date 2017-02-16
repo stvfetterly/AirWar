@@ -1,18 +1,19 @@
 #include "stdafx.h"
 #include "Weapon.h"
 #include "ServiceLocator.h"
-#include "Paddle.h"
 #include "Game.h"
 
 int Weapon::numWeapons = 0;
 
-Weapon::Weapon(float xVel, float yVel, WeaponsManager::WeaponType type) : _xVelocity(xVel), _yVelocity(yVel), _damage(0.0), _type(type)
+Weapon::Weapon(float xVel, float yVel, WeaponsManager::WeaponType type) : _damage(0.0), _type(type), _firedFrom(ENEMY)
 {
 	const float missileDamage = 25;
 	const float bombDamage = 50;
 	const float bulletDamage = 10;
 	const float laserDamage = 15;
 
+	_xVelocity = xVel;
+	_yVelocity = yVel;
 
 	//Load weapon image
 	switch (_type)
@@ -106,54 +107,71 @@ void Weapon::Draw(sf::RenderWindow& rw)
 	VisibleGameObject::Draw(rw);
 }
 
+
+
 void Weapon::Update(const float& elapsedTime)
 {
-	//Check if a collision with the opponent paddle has occured
-//	Paddle* paddle;
-
-	//If we're moving up, then we should be checking for a collision
-	/*	if (_velocity < 0)
-	{
-	paddle = dynamic_cast<Paddle*>(Game::GetGameObjectManager().Get("Paddle2"));
-	}
-	else //Otherwise we're going down looking for paddle 1 collision
-	{
-	paddle = dynamic_cast<Paddle*>(Game::GetGameObjectManager().Get("Paddle1"));
-	}
-
-	//If the paddle was found
-	if (paddle != NULL)
-	{
-	sf::Rect<float> PaddleRect = paddle->GetBoundingRect();
-	sf::Rect<float> LaserRect = GetBoundingRect();
-
-	//Check if the laser has hit the paddle
-	if (PaddleRect.intersects(LaserRect))
-	{
-	//If the paddle has been hit, set it's velocity to zero
-	paddle->Stun();
-
-	//hide the laser
-	SetPosition(Game::SCREEN_WIDTH * 2, Game::SCREEN_HEIGHT * 2);
-	return;
-	}
-	}
-	else
-	{
-	//TODO: Error handling, we should have found a paddle by now
-	}*/
-
-
 	//Update location
 	GetSprite().move(GetXVelocity() * elapsedTime, GetYVelocity() * elapsedTime);
-/*
-	//If we've moved out of the screen, then delete the rocket
+
+	//If we've moved out of the screen, then hide the missile and stop updating
 	if (GetPosition().y > (Game::SCREEN_HEIGHT + (GetHeight() / 2)) ||
 		GetPosition().y < 0.0 - (GetHeight() / 2))
 	{
-		const_cast<GameObjectManager&>(Game::GetGameObjectManager()).AddToDelQ(GetName());
+		Game::GetWeaponsManager().HideObject(this);
 	}
-	*/
+}
 
-	//If we've moved out of the screen, then hide the missile
+void Weapon::SetXVelocity(const float& newVelocity)
+{
+	_xVelocity = newVelocity;
+	UpdateDirection();
+
+}
+void Weapon::SetYVelocity(const float& newVelocity)
+{
+	_yVelocity = newVelocity;
+	UpdateDirection();
+}
+
+void Weapon::UpdateDirection()
+{
+	sf::Sprite& thisSprite = GetSprite();
+
+	//Point weapon up or down if it's travelling the same amount in x as y
+	if (std::abs(_xVelocity) == std::abs(_yVelocity))
+	{
+		if (_yVelocity > 0)
+		{
+			thisSprite.setRotation(180);		//Point down
+		}
+		else
+		{
+			thisSprite.setRotation(0);			//Point up
+		}
+	}
+	//Point weapon up or down if it's travelling more in y than x
+	else if (std::abs(_xVelocity) < std::abs(_yVelocity))
+	{
+		if (_yVelocity > 0)
+		{
+			thisSprite.setRotation(180);		//Point down
+		}
+		else
+		{
+			thisSprite.setRotation(0);			//Point up
+		}
+	}
+	//point weapon left or right if it's travelling more in x than y
+	else
+	{
+		if (_yVelocity > 0)
+		{
+			thisSprite.setRotation(90);		//Point right
+		}
+		else
+		{
+			thisSprite.setRotation(-90);	//Point left
+		}
+	}
 }

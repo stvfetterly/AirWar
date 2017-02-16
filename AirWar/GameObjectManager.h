@@ -17,6 +17,7 @@ public:
 	void SetPause(bool pause);
 	bool GetPause() { return _paused; }
 
+	std::vector<VisibleGameObject*> CollisionList(const sf::Rect<float>& objRect);
 
 private:
 	std::map<std::string, VisibleGameObject*> _gameObjects;

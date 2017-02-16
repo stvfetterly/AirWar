@@ -84,13 +84,33 @@ void GameObjectManager::SetPause(bool pause)
 {
 	if (_paused != pause)
 	{
-		//Pause/Unpause everything!
+		//Pause/Unpause everything on screen!
 		for (auto itr = _gameObjects.begin(); itr != _gameObjects.end(); ++itr)
 		{
-			itr->second->Pause(pause);
+			if (itr->second->IsVisible())
+			{
+				itr->second->Pause(pause);
+			}
 		}
 
 		//record that we've paused the game so we don't need to loop through everything again
 		_paused = pause;
 	}
+}
+
+//Returns a list of all intersecting objects with a given rectangle
+std::vector<VisibleGameObject*> GameObjectManager::CollisionList(const sf::Rect<float>& objRect)
+{
+	std::vector<VisibleGameObject*> collisionList;
+
+	for (auto itr = _gameObjects.begin(); itr != _gameObjects.end(); ++itr)
+	{
+		if (  itr->second->IsPaused() == false						&&	//Only check items if they aren't paused
+			  objRect.intersects(itr->second->GetBoundingRect())	)	//Only record items if they intersect with the given rectangle	
+		{
+			collisionList.push_back(itr->second);
+		}
+	}
+
+	return collisionList;
 }

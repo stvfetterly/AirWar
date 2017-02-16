@@ -5,7 +5,7 @@
 #include "SFMLSoundProvider.h"
 #include "ServiceLocator.h"
 #include "Aircraft.h"
-//#include "WeaponsManager.h"
+#include "PlaneSelectScreen.h"
 
 //Initialize static variables
 Game::GameState Game::_gameState = Uninitialized;
@@ -13,10 +13,8 @@ sf::RenderWindow Game::_mainWindow;
 GameObjectManager Game::_gameObjectManager;
 WeaponsManager Game::_weaponsManager;
 
-bool Game::_gunFire = true;
 bool Game::_music = true;
 Game::GameDifficulty Game::_difficulty = Game::Wannabe;
-bool Game::_constantMotion = true;
 
 
 
@@ -34,59 +32,12 @@ void Game::Start(void)
 	//Creates main window with specified resolution, 32 bit colour, and a title of AirWar!
 	_mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "AirWar!");
 	
+	//Create an enemy plane for testing				
+	Aircraft* enemy = new Aircraft(Aircraft::AIEnemy, "images/aircraft/enemy/AS2.png", Aircraft::AVG_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 500, WeaponsManager::MED_LASER, WeaponsManager::LG_BOMB);
+	enemy->SetPosition(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4);
+	_gameObjectManager.Add(enemy);
 
 
-
-/*	//Create score boards
-	Score* score1 = new Score();
-	Score* score2 = new Score();
-	score1->SetPosition((1024 / 2), 740);		//Scores go in the middle of the screen below the paddles
-	score2->SetPosition((1024 / 2), 28);
-	_gameObjectManager.Add("Score1", score1);
-	_gameObjectManager.Add("Score2", score2);
-	*/
-
-/*	//Creates paddles
-	Paddle* player1 = new Paddle(Paddle::Manual);									//player 1 is the lower paddle
-	Paddle* player2 = new Paddle(Paddle::Auto);										//player 2 is the upper paddle
-	player1->SetPosition((1024 / 2), static_cast<const float>(Paddle::LOW_Y_POS));	//Paddle1 in the middle, bottom
-	player2->SetPosition((1024 / 2), static_cast<const float>(Paddle::TOP_Y_POS));	//Paddle2 in the middle, top
-	_gameObjectManager.Add("Paddle1", player1);
-	_gameObjectManager.Add("Paddle2", player2);*/
-	
-/*	//Create the ball
-	GameBall* ball = new GameBall();
-	ball->SetPosition((SCREEN_WIDTH / 2), (SCREEN_HEIGHT / 2) - 15);
-	_gameObjectManager.Add("Ball", ball);
-	*/
-
-
-	//Create very fast, very light player aircraft
-	Aircraft* player1 = new Aircraft(Aircraft::Player, "images/aircraft/J31Yellow.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_LIGHT_AIRCRAFT_MASS, 500, WeaponsManager::SM_BULLET);
-	
-	//Create very slow, heavy player aircraft
-	Aircraft* player1b = new Aircraft(Aircraft::Player, "images/aircraft/J20Pink.png", Aircraft::VERY_SLOW_AIRCRAFT_SPEED, Aircraft::VERY_HEAVY_AIRCRAFT_MASS, 500, WeaponsManager::LG_MISSILE);
-
-	//Create normal speed, normal weight aircraft
-	Aircraft* player1c = new Aircraft(Aircraft::Player, "images/aircraft/F35red.png", Aircraft::AVG_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 500, WeaponsManager::MED_MISSILE);
-
-	//Create very heavy, very fast aircraft
-	Aircraft* player1d = new Aircraft(Aircraft::Player, "images/aircraft/T50.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_HEAVY_AIRCRAFT_MASS, 500, WeaponsManager::LG_LASER);
-
-	//Create light, fast aircraft
-	Aircraft* player1e = new Aircraft(Aircraft::Player, "images/aircraft/F22orange.png", Aircraft::FAST_AIRCRAFT_SPEED, Aircraft::LIGHT_AIRCRAFT_MASS, 500, WeaponsManager::MED_BOMB);
-
-	player1->SetPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-	player1b->SetPosition(SCREEN_WIDTH / 3, SCREEN_HEIGHT / 2);
-	player1c->SetPosition(SCREEN_WIDTH / 3 * 2, SCREEN_HEIGHT / 2);
-	player1d->SetPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 3);
-	player1e->SetPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 3 * 2);
-
-	_gameObjectManager.Add(player1);
-	_gameObjectManager.Add(player1b);
-	_gameObjectManager.Add(player1c);
-	_gameObjectManager.Add(player1d);
-	_gameObjectManager.Add(player1e);
 
 	//Pause all game objects so they don't start moving while at the splash screen
 	_gameObjectManager.SetPause(true);
@@ -164,7 +115,6 @@ void Game::GameLoop()
 				if (currentEvent.key.code == sf::Keyboard::Escape)
 				{
 					ShowMenu();
-					_gameState = Game::ShowingMenu;
 				}
 			}
 
@@ -178,23 +128,6 @@ void Game::GameLoop()
 					_gameObjectManager.SetPause(!_gameObjectManager.GetPause());
 				}
 			}
-
-/*			//Space fires the laser for user controlled paddle
-			if (currentEvent.type == sf::Event::KeyPressed)
-			{
-				if (currentEvent.key.code == sf::Keyboard::Space)
-				{
-					Paddle* firingPaddle = dynamic_cast<Paddle*>( _gameObjectManager.Get("Paddle1") );
-					if (firingPaddle != NULL)
-					{
-						firingPaddle->FireLaser();
-					}
-					else
-					{
-						//TODO - Error handling, can't find paddle!
-					}
-				}
-			}*/
 			break;
 
 		//show the main menu
@@ -207,33 +140,104 @@ void Game::GameLoop()
 			_gameObjectManager.SetPause(true);
 			ShowSplashScreen();
 			break;
+		case Game::ShowingPlaneSelect:
+			_gameObjectManager.SetPause(true);
 	}
 }
 
 void Game::ShowSplashScreen()
 {
+	_gameState = Game::ShowingSplash;
 	SplashScreen splashScreen;
 	splashScreen.Show(_mainWindow);
+	
+	//After user has clicked on splash screen, go to main menu
 	_gameState = Game::ShowingMenu;
+}
+
+void Game::ShowPlaneSelect()
+{
+	_gameState = Game::ShowingPlaneSelect;
+	PlaneSelectScreen planeSelect;
+	PlaneSelectScreen::MenuResult result = planeSelect.Show(_mainWindow);
+
+	Aircraft* player;
+	switch (result)
+	{
+	case PlaneSelectScreen::J31:
+		player = new Aircraft(Aircraft::Player, "images/aircraft/player/J31Yellow.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_LIGHT_AIRCRAFT_MASS, 500, WeaponsManager::SM_BULLET, WeaponsManager::SM_BOMB);
+		AddPlayerAircraft(player);
+		break;
+	case PlaneSelectScreen::J20:
+		player = new Aircraft(Aircraft::Player, "images/aircraft/player/J20Pink.png", Aircraft::VERY_SLOW_AIRCRAFT_SPEED, Aircraft::VERY_HEAVY_AIRCRAFT_MASS, 500, WeaponsManager::MED_MISSILE, WeaponsManager::LG_BOMB);
+		AddPlayerAircraft(player);
+		break;
+	case PlaneSelectScreen::T50:
+		player = new Aircraft(Aircraft::Player, "images/aircraft/player/T50.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_HEAVY_AIRCRAFT_MASS, 500, WeaponsManager::LG_LASER, WeaponsManager::LG_BOMB);
+		AddPlayerAircraft(player);
+		break;
+	case PlaneSelectScreen::F35:
+		player = new Aircraft(Aircraft::Player, "images/aircraft/player/F35red.png", Aircraft::AVG_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 500, WeaponsManager::LG_BULLET, WeaponsManager::MED_BOMB);
+		AddPlayerAircraft(player);
+		break;
+	case PlaneSelectScreen::F22:
+		player = new Aircraft(Aircraft::Player, "images/aircraft/player/F22orange.png", Aircraft::FAST_AIRCRAFT_SPEED, Aircraft::LIGHT_AIRCRAFT_MASS, 500, WeaponsManager::SM_MISSILE, WeaponsManager::SM_BOMB);
+		AddPlayerAircraft(player);
+		break;
+	case PlaneSelectScreen::MainMenu:
+		ShowMenu();
+		break;
+	case PlaneSelectScreen::Exit:
+		_gameState = Game::Exiting;
+		break;
+	default:
+		//Clicked on a part of the screen that does nothing - do nothing!
+		break;
+	}
+}
+
+void Game::AddPlayerAircraft(Aircraft* player)
+{
+	//Set the name to 'Player' for fast lookup later!
+	player->SetName("Player");
+
+	//Start player in middle of screen
+	player->SetPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
+
+	//If the player has gone back to the main menu to select a different plane, 
+	//update the health of this new plane to match the percentage of the previous one
+	Aircraft* oldPlane = dynamic_cast<Aircraft*>(_gameObjectManager.Get("Player"));
+	if (oldPlane != NULL)
+	{
+		float healthPercentage = oldPlane->GetHealth() / oldPlane->GetFullHealth();
+		player->SetHealth(player->GetFullHealth() * healthPercentage);
+
+		//Remove the old plane
+		_gameObjectManager.Remove("Player");
+	}
+
+	_gameObjectManager.Add(player);
+
+	//Plane selected, let's start playing the game!
+	_gameState = Game::Playing;
+
+	//Start all the visible objects moving!
+	_gameObjectManager.SetPause(false);
 }
 
 //Displays main menu, allows user to play game or exit
 void Game::ShowMenu()
 {
+	_gameState = Game::ShowingMenu;
 	MainMenu mainMenu;
 	MainMenu::MenuResult result = mainMenu.Show(_mainWindow);
 
 	switch (result)
 	{
 	case MainMenu::Play:
-		_gameState = Game::Playing;
-		//Start all the objects moving!
-		_gameObjectManager.SetPause(false);
+		ShowPlaneSelect();
 		break;
 		//handles selected options from the menu
-	case MainMenu::OptGun:
-		_gunFire = !_gunFire;
-		break;
 	case MainMenu::OptMusic:
 		_music = !_music;
 		break;
@@ -242,18 +246,15 @@ void Game::ShowMenu()
 		break;
 	case MainMenu::OptDifPansy:
 		_difficulty = Pansy;
-		UpdateImages();
 		break;
 	case MainMenu::OptDifWannabe:
 		_difficulty = Wannabe;
-		UpdateImages();
 		break;
 	case MainMenu::OptDifHard:
 		_difficulty = Hardcore;
-		UpdateImages();
 		break;
-	case MainMenu::OptConstMotion:
-		_constantMotion = !_constantMotion;
+	case MainMenu::Splash:
+		ShowSplashScreen();
 		break;
 	case MainMenu::Exit:
 		_gameState = Game::Exiting;
@@ -264,47 +265,6 @@ void Game::ShowMenu()
 	}
 }
 
-void Game::UpdateImages()
-{
-/*	//Load smaller paddles and smaller lasers for the player for hardcore gaming
-	Paddle* paddle[Game::NUM_PADDLES];
-	paddle[0] = dynamic_cast<Paddle*>(GetGameObjectManager().Get("Paddle1"));
-	paddle[1] = dynamic_cast<Paddle*>(GetGameObjectManager().Get("Paddle2"));
-
-	for (int i = 0; i < Game::NUM_PADDLES; i++)
-	{
-		if (NULL != paddle[i])
-		{
-			if (_difficulty == Hardcore)
-			{
-				//Smaller is harder for player, and makes the computer more accurate
-				paddle[i]->Load("images/paddleSmall.png");
-			}
-			else
-			{
-				paddle[i]->Load("images/paddle.png");
-			}
-		}
-	}
-
-	Laser* laser[3];
-	//Player users lasers 3, 4, and 5
-	laser[0] = dynamic_cast<Laser*>(GetGameObjectManager().Get("Laser3"));
-	laser[1] = dynamic_cast<Laser*>(GetGameObjectManager().Get("Laser4"));
-	laser[2] = dynamic_cast<Laser*>(GetGameObjectManager().Get("Laser5"));
-	for (int i = 0; i < 3; i++)
-	{
-		if (_difficulty == Hardcore)
-		{
-			laser[i]->Load("images/LaserSmall.png");
-		}
-		else
-		{
-			laser[i]->Load("images/Laser.png");
-		}
-	}*/
-}
-
 //Get events from the game (keyboard inputs)
 const sf::Event Game::GetInput()
 {
@@ -313,7 +273,7 @@ const sf::Event Game::GetInput()
 	return currentEvent;
 }
 
-const GameObjectManager& Game::GetGameObjectManager()
+GameObjectManager& Game::GetGameObjectManager()
 {
 	return Game::_gameObjectManager;
 }

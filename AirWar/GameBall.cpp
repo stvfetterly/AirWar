@@ -2,7 +2,6 @@
 #include "GameBall.h"
 #include "Game.h"
 #include "ServiceLocator.h"
-#include "Paddle.h"
 #include "Score.h"
 
 GameBall::GameBall() : _velocity(230.0)
@@ -92,7 +91,7 @@ void GameBall::Update(const float& elapsedTime)
 	//COLLISION WITH LOWER PADDLE
 
 	//Get the two paddles
-	Paddle* paddle[Game::NUM_PADDLES];
+/*	Paddle* paddle[Game::NUM_PADDLES];
 
 	paddle[0] = dynamic_cast<Paddle*>(Game::GetGameObjectManager().Get("Paddle1"));
 	paddle[1] = dynamic_cast<Paddle*>(Game::GetGameObjectManager().Get("Paddle2"));
@@ -151,7 +150,7 @@ void GameBall::Update(const float& elapsedTime)
 			}
 		}
 	}
-	
+	*/
 
 	//BALL FALLS OUT TOP OR BOTTOM OF SCREEN
 	if ( (GetPosition().y + GetHeight() / 2 + moveByY >= Game::SCREEN_HEIGHT ) ||	//Falling out bottom

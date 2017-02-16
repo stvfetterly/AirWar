@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "GameObjectManager.h"
 #include "WeaponsManager.h"
+#include "Aircraft.h"
 
 class Game
 {
@@ -17,14 +18,12 @@ public:
 	static void Start();
 	static sf::RenderWindow& GetWindow();
 	const static sf::Event GetInput();
-	const static GameObjectManager& GetGameObjectManager();
+	static GameObjectManager& GetGameObjectManager();
 	static WeaponsManager& GetWeaponsManager();
 
 	//Game options
-	static bool _gunFire;
 	static bool _music;
 	static GameDifficulty _difficulty;
-	static bool _constantMotion;
 
 private:
 	static bool IsExiting();
@@ -32,6 +31,7 @@ private:
 
 	static void ShowSplashScreen();
 	static void ShowMenu();
+	static void ShowPlaneSelect();
 
 	enum GameState 
 	{
@@ -39,6 +39,7 @@ private:
 		ShowingSplash,
 		Paused,
 		ShowingMenu,
+		ShowingPlaneSelect,
 		Playing,
 		Exiting
 	};
@@ -51,5 +52,5 @@ private:
 //	WeaponsManager* _weaponsManager;
 //	WeaponsManager _weaponsManager;
 
-	static void UpdateImages();
+	static void AddPlayerAircraft(Aircraft* player);
 };

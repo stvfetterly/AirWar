@@ -6,6 +6,8 @@
 class Weapon : public VisibleGameObject
 {
 public:
+	enum FiredFrom {PLAYER, ENEMY};
+
 	Weapon(float xVel, float yVel, WeaponsManager::WeaponType type);
 	~Weapon();
 
@@ -15,13 +17,17 @@ public:
 	float GetDamage() { return _damage; }
 	void SetDamage(const float& newDamage) { _damage = newDamage; }
 
+	void SetXVelocity(const float& newVelocity);
+	void SetYVelocity(const float& newVelocity);
+
+	void SetFiredFrom(const FiredFrom& newVal) { _firedFrom = newVal; }
+	FiredFrom GetFiredFrom() { return _firedFrom; }
 
 private:
-	float _xVelocity;      //positive = down, negative = up
-	float _yVelocity;
 	float _damage;			//Amount of damage that a weapon will do
 	static int numWeapons;
-
+	void UpdateDirection();
 	WeaponsManager::WeaponType _type;
+	FiredFrom _firedFrom;
 
 };

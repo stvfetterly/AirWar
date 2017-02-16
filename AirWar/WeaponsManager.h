@@ -27,9 +27,11 @@ public:
 
 	VisibleGameObject* GetWeapon(WeaponType type);
 	void HideObject(VisibleGameObject* objToHide);
+	static float GetRateOfFire(const WeaponType& weapon);
+	static float GetWeaponSpeed(const WeaponType& weapon);
 
 private:
-	static const int WEAPON_NUM = 40;
+	static const int WEAPON_NUM = 20;
 
 	std::map<WeaponType, std::vector<std::string>> _weaponNameMap;		//Keeps track of the names of all the weapons available
 	std::map<WeaponType, unsigned int> _curWeaponToUse;					//Keeps track of the next weapon to use

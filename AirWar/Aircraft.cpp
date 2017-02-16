@@ -3,11 +3,7 @@
 #include "Weapon.h"
 #include "Game.h"
 
-const float Aircraft::VERY_FAST_FIRING_RATE = 0.1f;
-const float Aircraft::FAST_FIRING_RATE = 0.25f;
-const float Aircraft::AVG_FIRING_RATE = 0.5f;
-const float Aircraft::SLOW_FIRING_RATE = 1.0f;
-const float Aircraft::VERY_SLOW_FIRING_RATE = 2.0f;
+const float Aircraft::COLLISION_DAMAGE = 10.0f;
 
 const float Aircraft::VERY_FAST_AIRCRAFT_SPEED = 1400.0f;
 const float Aircraft::FAST_AIRCRAFT_SPEED = 1200.0f;
@@ -28,12 +24,15 @@ Aircraft::Aircraft(ControlType type,
 	               float maxVelocity,
 	               float mass, 
 	               float health,
-	               WeaponsManager::WeaponType weaponType):
-	_stun(0.0f), _autoFire(0.0f), _rateOfFire(AVG_FIRING_RATE), _weaponType(weaponType)
+	               WeaponsManager::WeaponType weaponType,
+				   WeaponsManager::WeaponType weaponType2):
+	_stun(0.0f), _autoFire(0.0f), _rateOfFire(0.0f), _rateOfFire2(0.0f), 
+	_weaponType(weaponType), _weaponType2(weaponType2)
 {
 	_type = type;
 	_maxVelocity = maxVelocity;
 	_mass = mass;
+	_fullHealth = health;
 	_health = health;
 
 	//Load the image
@@ -56,23 +55,37 @@ Aircraft::~Aircraft()
 }
 
 //Plane actions
-void Aircraft::Fire(const float& elapsedTime)
+void Aircraft::Fire(const float& xVel, const float& yVel, const WeaponsManager::WeaponType& weaponType)
 {
-	//Grab next available missile, set to current location
-	VisibleGameObject* missile = Game::GetWeaponsManager().GetWeapon(_weaponType);
-	missile->SetPosition(this->GetPosition().x, this->GetPosition().y);
-	missile->SetYVelocity(-1200.0f);
+	//Grab next available weapon, set to current location
+	Weapon* weapon = dynamic_cast<Weapon*>(Game::GetWeaponsManager().GetWeapon(weaponType));
+
+	if (weapon != NULL)
+	{
+		weapon->SetPosition(this->GetPosition().x, this->GetPosition().y);				//Weapon fires from the center of plane
+		weapon->SetXVelocity(xVel);
+		weapon->SetYVelocity(yVel);
+
+		if (_type == Player)
+			weapon->SetFiredFrom(Weapon::PLAYER);
+		else
+			weapon->SetFiredFrom(Weapon::ENEMY);
+	}
+	else
+	{
+		//TODO - Error handling, should never get anything but a weapon from the weapons handler
+	}
 }
 
-void Aircraft::Damage(float damageAmount)
+void Aircraft::Damage(const float& damageAmount)
 {
-	_health -= damageAmount;
+	_fullHealth -= damageAmount;
 
-	if (_health < 0)
+	if (_fullHealth < 0)
 		Explode();
 }
 
-void Aircraft::Stun(float stunTime)
+void Aircraft::Stun(const float& stunTime)
 {
 	_stun = stunTime;
 }
@@ -113,20 +126,7 @@ void Aircraft::Update(const float& elapsedTime)
 
 void Aircraft::UpdateManual(const float& elapsedTime)
 {
-	//RULES FOR FIRING
-	if (_rateOfFire < 0.0)
-	{
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-		{
-			Fire(elapsedTime);  //Fire upon space bar press
-			_rateOfFire = VERY_FAST_FIRING_RATE;
-		}
-	}
-	else
-	{
-		_rateOfFire -= elapsedTime;
-	}
-
+	ManualFiring(elapsedTime);
 
 	//RULES FOR MANUAL MOTION
 
@@ -179,7 +179,7 @@ void Aircraft::UpdateManual(const float& elapsedTime)
 		_yVelocity -= velocityIncrement;	//Up makes the airplane move up
 	}
 
-	//Ensure that paddle speed stays within speed limits for x and y
+	//Ensure that aircraft speed stays within speed limits for x and y
 	if (_xVelocity > _maxVelocity)
 		_xVelocity = _maxVelocity;
 	else if (_xVelocity < -_maxVelocity)
@@ -191,11 +191,10 @@ void Aircraft::UpdateManual(const float& elapsedTime)
 		_yVelocity = -_maxVelocity;
 
 
-
 	//KEEP THE MANUAL PLANE ON SCREEN BY BOUNCING OFF EDGE
 	sf::Vector2f pos = this->GetPosition();
 
-	//Paddle will bounce off the wall if it gets to the left side
+	//Aircraft will bounce off the wall if it gets to any edge
 	float leftBound = GetSprite().getLocalBounds().width / 2;
 	float rightBound = Game::SCREEN_WIDTH - GetSprite().getLocalBounds().width / 2;
 	float upBound = GetSprite().getLocalBounds().height / 2;
@@ -204,29 +203,111 @@ void Aircraft::UpdateManual(const float& elapsedTime)
 	if (pos.x < leftBound)	//Bounce off left
 	{
 		this->SetPosition(leftBound, pos.y);
-		_xVelocity = -_xVelocity;
+		_xVelocity = -_xVelocity / 2;
 	}
 	else if (pos.x > rightBound)	//Bounce off right
 	{
 		this->SetPosition(rightBound, pos.y);
-		_xVelocity = -_xVelocity;
+		_xVelocity = -_xVelocity / 2;
 	}
 
 	if (pos.y < upBound)	//Bounce off top
 	{
 		this->SetPosition(pos.x, upBound);
-		_yVelocity = -_yVelocity;
+		_yVelocity = -_yVelocity / 2;
 	}
 	else if (pos.y > loBound)	//Bounce off bottom
 	{
 		this->SetPosition(pos.x, loBound);
-		_yVelocity = -_yVelocity;
+		_yVelocity = -_yVelocity / 2;
 	}
 
-	//Move the location of the paddle
+	//Move the location of the plane
 	GetSprite().move(_xVelocity * elapsedTime, _yVelocity * elapsedTime);
+
+	//Detect if damage has been taken
+	DamageDetection();
 }
+void Aircraft::ManualFiring(const float& elapsedTime)
+{
+	//RULES FOR FIRING
+
+	//Primary fire - Space
+	if (_rateOfFire <= 0.0)
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+		{
+			//Player primary weapon always fires UP, so yVel is negative
+			Fire(0.0, -WeaponsManager::GetWeaponSpeed(_weaponType), _weaponType);
+			_rateOfFire = WeaponsManager::GetRateOfFire(_weaponType);
+		}
+	}
+	else
+	{
+		_rateOfFire -= elapsedTime;
+	}
+
+	//Secondary Fire - Alt
+	if (_rateOfFire2 <= 0.0)
+	{
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::LAlt) ||
+			sf::Keyboard::isKeyPressed(sf::Keyboard::RAlt))
+		{
+			//Player secondary weapon always fires DOWN, so yVel is negative
+			Fire(0.0, WeaponsManager::GetWeaponSpeed(_weaponType2), _weaponType2);
+			_rateOfFire2 = WeaponsManager::GetRateOfFire(_weaponType2);
+		}
+	}
+	else
+	{
+		_rateOfFire2 -= elapsedTime;
+	}
+}
+
+void Aircraft::DamageDetection()
+{
+	//Get the collision list for this plane
+	std::vector<VisibleGameObject*> collisionList = Game::GetGameObjectManager().CollisionList(this->GetBoundingRect());
+
+	for (auto itr = collisionList.begin(); itr < collisionList.end(); ++itr)
+	{
+		//Check for weapons
+		Weapon* weapon = dynamic_cast<Weapon*> (*itr);
+		if (weapon != NULL)
+		{
+			//we have a weapon, now let's see if it's an enemy weapon
+			if ((weapon->GetFiredFrom() == Weapon::ENEMY && (_type == Player || _type == AIWingman)) ||
+				(weapon->GetFiredFrom() == Weapon::PLAYER && (_type == AIEnemy)							  ))	//Player and wingman can be hurt by ENEMY
+			{
+				//Deal damage from the weapon
+				Damage(weapon->GetDamage());
+
+				//After a collision, weapon should disappear
+				Game::GetWeaponsManager().HideObject(weapon);
+			}
+		}
+		//Check for aircraft
+		else
+		{
+			Aircraft* aircraft = dynamic_cast<Aircraft*> (*itr);
+
+			if (aircraft != NULL)
+			{
+				//we have collided with an aircraft, now let's see if it's an enemy aircraft
+				if (aircraft->GetType() == AIEnemy && _type == Player ||
+					aircraft->GetType() == Player && _type == AIEnemy)
+				{
+					//Deal damage to both planes for the collision
+					aircraft->Damage(COLLISION_DAMAGE);
+					Damage(COLLISION_DAMAGE);
+				}
+			}
+		}
+	}
+}
+
+
 void Aircraft::UpdateAuto(const float& elapsedTime)
 {
-
+	DamageDetection();
 }

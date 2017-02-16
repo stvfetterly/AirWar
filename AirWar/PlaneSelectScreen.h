@@ -1,24 +1,24 @@
 #pragma once
+
 #include "stdafx.h"
 
-class MainMenu
+class PlaneSelectScreen
 {
 
 public:
-	MainMenu();
+	PlaneSelectScreen();
 
 	//Options for the menu selection
 	enum MenuResult
-	{ 
+	{
 		Nothing,
-		Splash,
-		Play, 
-			OptMusic, 
-			OptSound, 
-				OptDifPansy, 
-				OptDifWannabe, 
-				OptDifHard, 
-		Exit 
+		J31,
+		J20,
+		T50,
+		F22,
+		F35,
+		MainMenu,
+		Exit
 	};
 
 	struct MenuItem
@@ -34,14 +34,6 @@ private:
 	MenuResult GetMenuResponse(sf::RenderWindow& window);
 	MenuResult HandleClick(int x, int y);
 	std::list<MenuItem> _menuItems;
-
-	sf::Texture _checkedImage;
-	sf::Texture _unCheckedImage;
-	sf::Sprite _musicBox;
-	sf::Sprite _soundBox;
-	sf::Sprite _pansyBox;
-	sf::Sprite _wannabeBox;
-	sf::Sprite _hardcoreBox;
 
 	void UpdateBox(sf::RenderWindow& window, sf::Sprite& updatedSprite, bool newVal);
 };

@@ -74,3 +74,79 @@ void  WeaponsManager::CreateAllOrdnance()
 		}
 	}
 }
+
+float WeaponsManager::GetRateOfFire(const WeaponType& weapon)
+{
+	switch (weapon)
+	{
+	case WeaponsManager::SM_MISSILE:
+		return 0.15f;
+	case WeaponsManager::MED_MISSILE:
+		return 0.22f;
+	case WeaponsManager::LG_MISSILE:
+		return 0.28f;
+	case WeaponsManager::SM_BULLET:
+		return 0.025f;
+	case WeaponsManager::MED_BULLET:
+		return 0.1f;
+	case WeaponsManager::LG_BULLET:
+		return 0.2f;
+	case WeaponsManager::SM_BOMB:
+		return 0.1f;
+	case WeaponsManager::MED_BOMB:
+		return 0.25f;
+	case WeaponsManager::LG_BOMB:
+		return 0.5f;
+	case WeaponsManager::SM_LASER:
+		return 0.1f;
+	case WeaponsManager::MED_LASER:
+		return 0.28f;
+	case WeaponsManager::LG_LASER:
+		return 0.3f;
+	case WeaponsManager::TOTAL_WEAPONS:
+		//TODO: Should never get here
+		break;
+	default:
+		break;
+	}
+		
+	return 0.0f;
+}
+
+float WeaponsManager::GetWeaponSpeed(const WeaponType& weapon)
+{
+	switch (weapon)
+	{
+	case WeaponsManager::SM_MISSILE:
+		return 1100.0f;
+	case WeaponsManager::MED_MISSILE:
+		return 1000.0f;
+	case WeaponsManager::LG_MISSILE:
+		return 900.0f;
+	case WeaponsManager::SM_BULLET:
+		return 1200.0f;
+	case WeaponsManager::MED_BULLET:
+		return 1200.0f;
+	case WeaponsManager::LG_BULLET:
+		return 1200.0f;
+	case WeaponsManager::SM_BOMB:
+		return 1000.0f;
+	case WeaponsManager::MED_BOMB:
+		return 900.0f;
+	case WeaponsManager::LG_BOMB:
+		return 800.0f;
+	case WeaponsManager::SM_LASER:
+		return 1200.0f;
+	case WeaponsManager::MED_LASER:
+		return 1100.0f;
+	case WeaponsManager::LG_LASER:
+		return 1000.0f;
+	case WeaponsManager::TOTAL_WEAPONS:
+		//TODO: Should never get here
+		break;
+	default:
+		break;
+	}
+
+	return 0.0f;
+}

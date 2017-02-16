@@ -6,7 +6,7 @@ void SplashScreen::Show(sf::RenderWindow & renderWindow)
 {
 	//Create a variable to hold the splash screen image
 	sf::Texture image;
-	if (image.loadFromFile("images/Splash1024x768.png") != true)
+	if (image.loadFromFile("images/Menu/Splash1024x768.png") != true)
 	{
 		//If the image is not found, just return
 		//TODO: Error handling

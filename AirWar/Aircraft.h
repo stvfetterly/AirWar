@@ -7,6 +7,8 @@ class Aircraft : public VisibleGameObject
 public:
 	static int numAircraft;
 
+	const static float COLLISION_DAMAGE;
+
 	const static float VERY_FAST_AIRCRAFT_SPEED;
 	const static float FAST_AIRCRAFT_SPEED;
 	const static float AVG_AIRCRAFT_SPEED;
@@ -19,38 +21,43 @@ public:
 	const static float LIGHT_AIRCRAFT_MASS;
 	const static float VERY_LIGHT_AIRCRAFT_MASS;
 
-	const static float VERY_FAST_FIRING_RATE;
-	const static float FAST_FIRING_RATE;
-	const static float AVG_FIRING_RATE;
-	const static float SLOW_FIRING_RATE;
-	const static float VERY_SLOW_FIRING_RATE;
-
 	enum ControlType { Player, AIEnemy, AIWingman };
 	
-	Aircraft(ControlType type, const std::string& image, float maxVelocity, float mass, float health, WeaponsManager::WeaponType weaponType);
+	Aircraft(ControlType type, const std::string& image, float maxVelocity, float mass, float health, WeaponsManager::WeaponType weaponType, WeaponsManager::WeaponType weaponType2);
 
 	virtual ~Aircraft();
 
 	ControlType GetType() { return _type; }
 
 	//Plane actions
-	virtual void Fire(const float& elapsedTime);
-	void Damage(float damageAmount);
-	void Stun(float stunTime);
+	virtual void Fire(const float& xVel, const float& yVel, const WeaponsManager::WeaponType& weaponType);
+	void Damage(const float& damageAmount);
+	void Stun(const float& stunTime);
 	void Explode();
 	void Update(const float& elapsedTime);			//Updates plane position
 
-private:
-	float _maxVelocity;		//maximum speed of this aircraft
-	float _stun;			//keeps track of amount of time left until plane can move again
-	float _autoFire;		//keeps track of amount of time left until AI should fire again
-	float _health;			//Total amount of health for the aircraft
-	float _mass;			//Used to calculate the steering precision
-	float _rateOfFire;		//Used to set the rate of fire
+	float GetHealth() { return _health; }
+	float GetFullHealth() { return _fullHealth; }
+	void SetHealth(float health) { _health = health; }
 
-	ControlType _type;		//is this plane AI, or user controlled
-	WeaponsManager::WeaponType _weaponType;		//Keeps track of the type of weapon that this plane is using
+private:
+	float _maxVelocity;			//maximum speed of this aircraft
+	float _stun;				//keeps track of amount of time left until plane can move again
+	float _autoFire;			//keeps track of amount of time left until AI should fire again
+	float _fullHealth;			//Total amount of health for the aircraft
+	float _health;				//Amount of health left for the aircraft
+	float _mass;				//Used to calculate the steering precision
+	float _rateOfFire;			//Used to set the rate of fire for primary weapon
+	float _rateOfFire2;			//Used to set the rate of fire for secondary weapon
+
+	ControlType _type;			//is this plane AI, or user controlled
+	WeaponsManager::WeaponType _weaponType;		//Keeps track of the pirmary type of weapon that this plane is using
+	WeaponsManager::WeaponType _weaponType2;	//Keeps track of the secondary type of weapon that this plane is using
 
 	void UpdateManual(const float& elapsedTime);
+	void ManualFiring(const float& elapsedTime);
+
+	void DamageDetection();
+
 	virtual void UpdateAuto(const float& elapsedTime);
 };

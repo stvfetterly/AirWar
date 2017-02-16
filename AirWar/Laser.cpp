@@ -1,7 +1,6 @@
 #include "stdafx.h"
 #include "Laser.h"
 #include "ServiceLocator.h"
-#include "Paddle.h"
 #include "Game.h"
 
 
