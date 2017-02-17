@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "GameObjectManager.h"
 #include "WeaponsManager.h"
+#include "EnemyManager.h"
 #include "Aircraft.h"
 
 class Game
@@ -20,6 +21,7 @@ public:
 	const static sf::Event GetInput();
 	static GameObjectManager& GetGameObjectManager();
 	static WeaponsManager& GetWeaponsManager();
+	static EnemyManager& GetEnemyManager();
 
 	//Game options
 	static bool _music;
@@ -48,6 +50,7 @@ private:
 	static sf::RenderWindow _mainWindow;
 	static GameObjectManager _gameObjectManager;
 	static WeaponsManager _weaponsManager;
+	static EnemyManager _enemyManager;
 	//static WeaponsManager* _weaponsManager;
 //	WeaponsManager* _weaponsManager;
 //	WeaponsManager _weaponsManager;

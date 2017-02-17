@@ -26,7 +26,6 @@ public:
 private:
 	float _damage;			//Amount of damage that a weapon will do
 	static int numWeapons;
-	void UpdateDirection();
 	WeaponsManager::WeaponType _type;
 	FiredFrom _firedFrom;
 

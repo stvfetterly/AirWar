@@ -8,7 +8,7 @@ public:
 	~GameObjectManager();
 
 	void Add(VisibleGameObject* gameObject);
-	void Remove(const std::string& name);						
+	void Remove(const std::string& name);							//Note - do not call from inside update loop, add the object to the deletion queue instead		
 	int GetObjectCount() const;
 	VisibleGameObject* Get(const std::string& name) const;
 	
@@ -17,10 +17,12 @@ public:
 	void SetPause(bool pause);
 	bool GetPause() { return _paused; }
 
-	std::vector<VisibleGameObject*> CollisionList(const sf::Rect<float>& objRect);
+	std::vector<VisibleGameObject*> GetCollisionList(const sf::Rect<float>& objRect);
+	void AddToDeletionQueue(const std::string& newItem) { _deletionQueue.push_back(newItem); }
 
 private:
 	std::map<std::string, VisibleGameObject*> _gameObjects;
+	std::vector<std::string> _deletionQueue;				//Used to hold a list of objects that should be deleted after update
 	sf::Clock clock;
 	
 	bool _paused;

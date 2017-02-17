@@ -25,7 +25,11 @@ public:
 	virtual void Pause(bool newVal) { _isPaused = newVal; }
 
 	virtual float GetXVelocity() { return _xVelocity; }
-	virtual void SetXVelocity(const float& newVelocity) { _xVelocity = newVelocity; }
+	virtual void SetXVelocity(const float& newVelocity)
+	{ 
+		_xVelocity = newVelocity; 
+		UpdateDirection();
+	}
 	virtual float GetYVelocity() { return _yVelocity; }
 	virtual void SetYVelocity(const float& newVelocity) { _yVelocity = newVelocity; }
 
@@ -41,6 +45,7 @@ protected:
 	float _xVelocity;		//positive = right, negative = left
 	float _yVelocity;		//positive = down, negative = up
 
+	void UpdateDirection();	//Updates the angle of the loaded image based on current velocity
 
 private:
 	static int numObjects;

@@ -5,8 +5,6 @@
 class Aircraft : public VisibleGameObject
 {
 public:
-	static int numAircraft;
-
 	const static float COLLISION_DAMAGE;
 
 	const static float VERY_FAST_AIRCRAFT_SPEED;
@@ -41,6 +39,8 @@ public:
 	void SetHealth(float health) { _health = health; }
 
 private:
+	static int numAircraft;
+
 	float _maxVelocity;			//maximum speed of this aircraft
 	float _stun;				//keeps track of amount of time left until plane can move again
 	float _autoFire;			//keeps track of amount of time left until AI should fire again

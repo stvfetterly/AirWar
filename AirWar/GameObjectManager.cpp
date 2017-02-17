@@ -78,6 +78,17 @@ void GameObjectManager::UpdateAll()
 			itr->second->Update(timeDelta);
 		}
 	}
+
+	//Check the deletion queue
+	if (_deletionQueue.size() > 0)
+	{
+		//remove each item queued up to be deleted when it's safe to do so
+		for (auto itr = _deletionQueue.begin(); itr < _deletionQueue.end(); ++itr)
+		{
+			Remove(*itr);
+		}
+	}
+
 }
 
 void GameObjectManager::SetPause(bool pause)
@@ -99,7 +110,7 @@ void GameObjectManager::SetPause(bool pause)
 }
 
 //Returns a list of all intersecting objects with a given rectangle
-std::vector<VisibleGameObject*> GameObjectManager::CollisionList(const sf::Rect<float>& objRect)
+std::vector<VisibleGameObject*> GameObjectManager::GetCollisionList(const sf::Rect<float>& objRect)
 {
 	std::vector<VisibleGameObject*> collisionList;
 

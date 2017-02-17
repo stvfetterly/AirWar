@@ -72,6 +72,12 @@
     <ClInclude Include="PlaneSelectScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Boom.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -123,6 +129,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="PlaneSelectScreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Boom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

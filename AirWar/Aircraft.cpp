@@ -2,6 +2,7 @@
 #include "Aircraft.h"
 #include "Weapon.h"
 #include "Game.h"
+#include "Boom.h"
 
 const float Aircraft::COLLISION_DAMAGE = 10.0f;
 
@@ -40,7 +41,7 @@ Aircraft::Aircraft(ControlType type,
 
 	assert(IsLoaded());		//If the image wasn't loaded, we've got a problem
 
-							//Figure out what the center of the paddle is, and use the X and Y of this position as the origin
+	//Figure out what the center of the plane is, and use the X and Y of this position as the origin
 	GetSprite().setOrigin(GetSprite().getGlobalBounds().width / 2,
 		GetSprite().getGlobalBounds().height / 2);
 
@@ -92,9 +93,16 @@ void Aircraft::Stun(const float& stunTime)
 
 void Aircraft::Explode()
 {
+	
 	//If this aircraft is player controlled, restart game and return to menu
 
-	//Otherwise remove this aircraft from the game
+	//Otherwise queue this aircraft to be removed from the game
+	Game::GetGameObjectManager().AddToDeletionQueue(_name);
+	
+	//Add the boom
+	Boom* explodePlane = new Boom();
+	explodePlane->SetPosition(GetPosition().x, GetPosition().y);
+	Game::GetGameObjectManager().Add(explodePlane);
 }
 
 void Aircraft::Update(const float& elapsedTime)
@@ -225,6 +233,9 @@ void Aircraft::UpdateManual(const float& elapsedTime)
 	//Move the location of the plane
 	GetSprite().move(_xVelocity * elapsedTime, _yVelocity * elapsedTime);
 
+	//Change angle of plane
+	UpdateDirection();
+
 	//Detect if damage has been taken
 	DamageDetection();
 }
@@ -267,7 +278,7 @@ void Aircraft::ManualFiring(const float& elapsedTime)
 void Aircraft::DamageDetection()
 {
 	//Get the collision list for this plane
-	std::vector<VisibleGameObject*> collisionList = Game::GetGameObjectManager().CollisionList(this->GetBoundingRect());
+	std::vector<VisibleGameObject*> collisionList = Game::GetGameObjectManager().GetCollisionList(this->GetBoundingRect());
 
 	for (auto itr = collisionList.begin(); itr < collisionList.end(); ++itr)
 	{

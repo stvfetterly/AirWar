@@ -145,6 +145,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Aircraft.h" />
+    <ClInclude Include="Boom.h" />
+    <ClInclude Include="EnemyManager.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameBall.h" />
     <ClInclude Include="GameObjectManager.h" />
@@ -166,6 +168,8 @@
   <ItemGroup>
     <ClCompile Include="Aircraft.cpp" />
     <ClCompile Include="AirWar.cpp" />
+    <ClCompile Include="Boom.cpp" />
+    <ClCompile Include="EnemyManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameBall.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />

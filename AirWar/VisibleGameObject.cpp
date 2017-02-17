@@ -104,3 +104,45 @@ sf::Rect<float> VisibleGameObject::GetBoundingRect() const
 	return _sprite.getGlobalBounds();
 }
 
+void VisibleGameObject::UpdateDirection()
+{
+	sf::Sprite& thisSprite = GetSprite();
+
+	//Set correct angle algorithm
+	float theta = 0;
+
+	//If the object is heading up then just use normal sin
+	if (_yVelocity <= 0)
+	{
+		float hypotenuse = std::sqrtf(_xVelocity*_xVelocity + _yVelocity*_yVelocity);
+		if (hypotenuse == 0)
+		{
+			//Do nothing to rotation, the object is not moving
+			return;
+		}
+		else
+		{
+			float value = _xVelocity / hypotenuse;
+			theta = std::asinf(value) * (180 / M_PI);		//Convert back to degrees
+		}
+	}
+	else
+		//Object is heading down, so to get correct angle of rotation we need to subtract it from 180
+	{
+		float hypotenuse = std::sqrtf(_xVelocity*_xVelocity + _yVelocity*_yVelocity);
+		
+		if (hypotenuse == 0)
+		{
+			//Do nothing to rotation, the object is not moving
+			return;
+		}
+		else
+		{
+			float value = _xVelocity / hypotenuse;
+			theta = std::asinf(value) * (180 / M_PI);		//Convert back to degrees
+		}
+
+		theta = 180 - theta;
+	}
+	thisSprite.setRotation(theta);
+}

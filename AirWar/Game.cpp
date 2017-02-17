@@ -12,6 +12,7 @@ Game::GameState Game::_gameState = Uninitialized;
 sf::RenderWindow Game::_mainWindow;
 GameObjectManager Game::_gameObjectManager;
 WeaponsManager Game::_weaponsManager;
+EnemyManager Game::_enemyManager;
 
 bool Game::_music = true;
 Game::GameDifficulty Game::_difficulty = Game::Wannabe;
@@ -33,7 +34,7 @@ void Game::Start(void)
 	_mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "AirWar!");
 	
 	//Create an enemy plane for testing				
-	Aircraft* enemy = new Aircraft(Aircraft::AIEnemy, "images/aircraft/enemy/AS2.png", Aircraft::AVG_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 500, WeaponsManager::MED_LASER, WeaponsManager::LG_BOMB);
+	Aircraft* enemy = EnemyManager::CreateEnemyPlane(EnemyManager::AS2);
 	enemy->SetPosition(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4);
 	_gameObjectManager.Add(enemy);
 
