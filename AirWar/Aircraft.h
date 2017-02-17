@@ -21,24 +21,27 @@ public:
 
 	enum ControlType { Player, AIEnemy, AIWingman };
 	
-	Aircraft(ControlType type, const std::string& image, float maxVelocity, float mass, float health, WeaponsManager::WeaponType weaponType, WeaponsManager::WeaponType weaponType2);
-
+	Aircraft();
 	virtual ~Aircraft();
 
 	ControlType GetType() { return _type; }
 
 	//Plane actions
-	virtual void Fire(const float& xVel, const float& yVel, const WeaponsManager::WeaponType& weaponType);
+	void Fire(const float& xVel, const float& yVel, const WeaponsManager::WeaponType& weaponType);
 	void Damage(const float& damageAmount);
 	void Stun(const float& stunTime);
+	bool IsStunned(const float& elapsedTime);
 	void Explode();
-	void Update(const float& elapsedTime);			//Updates plane position
+	virtual void Update(const float& elapsedTime);			//Updates plane position
 
 	float GetHealth() { return _health; }
 	float GetFullHealth() { return _fullHealth; }
 	void SetHealth(float health) { _health = health; }
 
-private:
+protected:
+	virtual void FiringRules(const float& elapsedTime);
+	void DamageDetection();
+
 	static int numAircraft;
 
 	float _maxVelocity;			//maximum speed of this aircraft
@@ -51,13 +54,9 @@ private:
 	float _rateOfFire2;			//Used to set the rate of fire for secondary weapon
 
 	ControlType _type;			//is this plane AI, or user controlled
+
 	WeaponsManager::WeaponType _weaponType;		//Keeps track of the pirmary type of weapon that this plane is using
 	WeaponsManager::WeaponType _weaponType2;	//Keeps track of the secondary type of weapon that this plane is using
 
-	void UpdateManual(const float& elapsedTime);
-	void ManualFiring(const float& elapsedTime);
 
-	void DamageDetection();
-
-	virtual void UpdateAuto(const float& elapsedTime);
 };

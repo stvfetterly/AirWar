@@ -12,7 +12,7 @@ Game::GameState Game::_gameState = Uninitialized;
 sf::RenderWindow Game::_mainWindow;
 GameObjectManager Game::_gameObjectManager;
 WeaponsManager Game::_weaponsManager;
-EnemyManager Game::_enemyManager;
+PlaneManager Game::_planeManager;
 
 bool Game::_music = true;
 Game::GameDifficulty Game::_difficulty = Game::Wannabe;
@@ -34,7 +34,7 @@ void Game::Start(void)
 	_mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "AirWar!");
 	
 	//Create an enemy plane for testing				
-	Aircraft* enemy = EnemyManager::CreateEnemyPlane(EnemyManager::AS2);
+	Aircraft* enemy = PlaneManager::CreatePlane(PlaneManager::Enemy_AS2);
 	enemy->SetPosition(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4);
 	_gameObjectManager.Add(enemy);
 
@@ -166,24 +166,19 @@ void Game::ShowPlaneSelect()
 	switch (result)
 	{
 	case PlaneSelectScreen::J31:
-		player = new Aircraft(Aircraft::Player, "images/aircraft/player/J31Yellow.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_LIGHT_AIRCRAFT_MASS, 500, WeaponsManager::SM_BULLET, WeaponsManager::SM_BOMB);
-		AddPlayerAircraft(player);
+		player = _planeManager.CreatePlane(PlaneManager::Player_J31);
 		break;
 	case PlaneSelectScreen::J20:
-		player = new Aircraft(Aircraft::Player, "images/aircraft/player/J20Pink.png", Aircraft::VERY_SLOW_AIRCRAFT_SPEED, Aircraft::VERY_HEAVY_AIRCRAFT_MASS, 500, WeaponsManager::MED_MISSILE, WeaponsManager::LG_BOMB);
-		AddPlayerAircraft(player);
+		player = _planeManager.CreatePlane(PlaneManager::Player_J20);
 		break;
 	case PlaneSelectScreen::T50:
-		player = new Aircraft(Aircraft::Player, "images/aircraft/player/T50.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_HEAVY_AIRCRAFT_MASS, 500, WeaponsManager::LG_LASER, WeaponsManager::LG_BOMB);
-		AddPlayerAircraft(player);
+		player = _planeManager.CreatePlane(PlaneManager::Player_T50);
 		break;
 	case PlaneSelectScreen::F35:
-		player = new Aircraft(Aircraft::Player, "images/aircraft/player/F35red.png", Aircraft::AVG_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 500, WeaponsManager::LG_BULLET, WeaponsManager::MED_BOMB);
-		AddPlayerAircraft(player);
+		player = _planeManager.CreatePlane(PlaneManager::Player_F35);
 		break;
 	case PlaneSelectScreen::F22:
-		player = new Aircraft(Aircraft::Player, "images/aircraft/player/F22orange.png", Aircraft::FAST_AIRCRAFT_SPEED, Aircraft::LIGHT_AIRCRAFT_MASS, 500, WeaponsManager::SM_MISSILE, WeaponsManager::SM_BOMB);
-		AddPlayerAircraft(player);
+		player = _planeManager.CreatePlane(PlaneManager::Player_F22);
 		break;
 	case PlaneSelectScreen::MainMenu:
 		ShowMenu();
@@ -195,6 +190,12 @@ void Game::ShowPlaneSelect()
 		//Clicked on a part of the screen that does nothing - do nothing!
 		break;
 	}
+
+	//Plane selected, let's start playing the game!
+	_gameState = Game::Playing;
+
+	//Start all the visible objects moving!
+	_gameObjectManager.SetPause(false);
 }
 
 void Game::AddPlayerAircraft(Aircraft* player)

@@ -7,8 +7,8 @@ MainMenu::MainMenu()
 {
 	//Load the checked and unchecked image for use by checkboxes
 	//(Big problem if they're not found)
-	assert(_checkedImage.loadFromFile("images/checkChecked.png"));
-	assert(_unCheckedImage.loadFromFile("images/checkEmpty.png"));
+	assert(_checkedImage.loadFromFile("images/menu/checkChecked.png"));
+	assert(_unCheckedImage.loadFromFile("images/menu/checkEmpty.png"));
 
 	//Set position of all checkboxes
 	_musicBox.setPosition(90, 235);

@@ -22,7 +22,7 @@ Boom::Boom() : _animationCellDisplayed(0), _timeToChangeCell(ANIMATION_TIME)
 
 Boom::~Boom()
 {
-	totalNumBooms--;
+
 }
 
 void Boom::LoadBooms(const BoomType& type)

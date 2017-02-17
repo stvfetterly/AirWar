@@ -115,15 +115,18 @@ void VisibleGameObject::UpdateDirection()
 	if (_yVelocity <= 0)
 	{
 		float hypotenuse = std::sqrtf(_xVelocity*_xVelocity + _yVelocity*_yVelocity);
+
+
+		//Check if object has stopped moving
 		if (hypotenuse == 0)
 		{
-			//Do nothing to rotation, the object is not moving
+			//Do nothing to rotation
 			return;
 		}
 		else
 		{
 			float value = _xVelocity / hypotenuse;
-			theta = std::asinf(value) * (180 / M_PI);		//Convert back to degrees
+			theta = static_cast<float>(std::asinf(value) * (180.0f / M_PI));		//Convert back to degrees
 		}
 	}
 	else
@@ -139,7 +142,7 @@ void VisibleGameObject::UpdateDirection()
 		else
 		{
 			float value = _xVelocity / hypotenuse;
-			theta = std::asinf(value) * (180 / M_PI);		//Convert back to degrees
+			theta = static_cast<float>(std::asinf(value) * (180.0f / M_PI));		//Convert back to degrees
 		}
 
 		theta = 180 - theta;

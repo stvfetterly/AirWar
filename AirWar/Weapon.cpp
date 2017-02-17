@@ -7,10 +7,10 @@ int Weapon::numWeapons = 0;
 
 Weapon::Weapon(float xVel, float yVel, WeaponsManager::WeaponType type) : _damage(0.0), _type(type), _firedFrom(ENEMY)
 {
-	const float missileDamage = 25;
-	const float bombDamage = 50;
+	const float missileDamage = 50;
+	const float bombDamage = 100;
 	const float bulletDamage = 10;
-	const float laserDamage = 15;
+	const float laserDamage = 45;
 
 	_xVelocity = xVel;
 	_yVelocity = yVel;
@@ -99,7 +99,7 @@ Weapon::Weapon(float xVel, float yVel, WeaponsManager::WeaponType type) : _damag
 
 Weapon::~Weapon()
 {
-	numWeapons--;
+
 }
 
 void Weapon::Draw(sf::RenderWindow& rw)

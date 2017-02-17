@@ -27,16 +27,10 @@
     <ClInclude Include="Game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameBall.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="GameObjectManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="IAudioProvider.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Laser.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MainMenuScreen.h">
@@ -72,10 +66,16 @@
     <ClInclude Include="PlaneSelectScreen.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="EnemyManager.h">
+    <ClInclude Include="Boom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Boom.h">
+    <ClInclude Include="AircraftPlayer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AircraftEnemy.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PlaneManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -89,13 +89,7 @@
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GameBall.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GameObjectManager.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Laser.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MainMenuScreen.cpp">
@@ -131,10 +125,16 @@
     <ClCompile Include="PlaneSelectScreen.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="EnemyManager.cpp">
+    <ClCompile Include="Boom.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Boom.cpp">
+    <ClCompile Include="AircraftPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AircraftEnemy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PlaneManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

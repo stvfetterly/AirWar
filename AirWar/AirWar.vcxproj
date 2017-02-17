@@ -145,13 +145,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Aircraft.h" />
+    <ClInclude Include="AircraftEnemy.h" />
+    <ClInclude Include="AircraftPlayer.h" />
     <ClInclude Include="Boom.h" />
-    <ClInclude Include="EnemyManager.h" />
+    <ClInclude Include="PlaneManager.h" />
     <ClInclude Include="Game.h" />
-    <ClInclude Include="GameBall.h" />
     <ClInclude Include="GameObjectManager.h" />
     <ClInclude Include="IAudioProvider.h" />
-    <ClInclude Include="Laser.h" />
     <ClInclude Include="MainMenuScreen.h" />
     <ClInclude Include="PlaneSelectScreen.h" />
     <ClInclude Include="Weapon.h" />
@@ -167,13 +167,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Aircraft.cpp" />
+    <ClCompile Include="AircraftEnemy.cpp" />
+    <ClCompile Include="AircraftPlayer.cpp" />
     <ClCompile Include="AirWar.cpp" />
     <ClCompile Include="Boom.cpp" />
-    <ClCompile Include="EnemyManager.cpp" />
+    <ClCompile Include="PlaneManager.cpp" />
     <ClCompile Include="Game.cpp" />
-    <ClCompile Include="GameBall.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
-    <ClCompile Include="Laser.cpp" />
     <ClCompile Include="MainMenuScreen.cpp" />
     <ClCompile Include="PlaneSelectScreen.cpp" />
     <ClCompile Include="Weapon.cpp" />
