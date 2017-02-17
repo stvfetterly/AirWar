@@ -13,9 +13,11 @@ Boom::Boom(BoomType type) : _animationCellDisplayed(0), _timeToChangeCell(ANIMAT
 
 Boom::Boom() : _animationCellDisplayed(0), _timeToChangeCell(ANIMATION_TIME)
 {
-	//Randomize the boom
-	srand(static_cast<unsigned int>(time(NULL)));
-	BoomType type = static_cast<BoomType>(std::rand() % TotalBoomTypes);
+	//C11 style random number generation
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_real_distribution<float> dist(0.0f, static_cast<float> (TotalBoomTypes));
+	BoomType type = static_cast<BoomType>(static_cast<int>((dist(mt) - 1.0f)));
 
 	LoadBooms(type);
 }
@@ -92,10 +94,18 @@ void Boom::LoadBooms(const BoomType& type)
 	GetSprite().setOrigin(GetSprite().getGlobalBounds().width / 2,
 		GetSprite().getGlobalBounds().height / 2);
 
-	//Set rotation of the boom randomly
+/*	//Set rotation of the boom randomly
 	srand(static_cast<unsigned int>(time(NULL)));
 	_rotation = static_cast<float>(std::rand() % 359);
+	GetSprite().setRotation(_rotation);*/
+
+	//C11 style random number generation
+	std::random_device rd;
+	std::mt19937 mt(rd());
+	std::uniform_real_distribution<float> dist(0.0f, 359.9f);
+	_rotation = dist(mt);
 	GetSprite().setRotation(_rotation);
+
 
 	totalNumBooms++;
 	_name = "Boom" + std::to_string(totalNumBooms);

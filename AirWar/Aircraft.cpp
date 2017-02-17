@@ -70,10 +70,7 @@ void Aircraft::Stun(const float& stunTime)
 
 void Aircraft::Explode()
 {
-	
-	//If this aircraft is player controlled, restart game and return to menu
-
-	//Otherwise queue this aircraft to be removed from the game
+	//Queue this aircraft to be removed from the game
 	Game::GetGameObjectManager().AddToDeletionQueue(_name);
 	
 	//Add the boom

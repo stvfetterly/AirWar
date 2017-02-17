@@ -4,11 +4,34 @@
 class AircraftEnemy : public Aircraft
 {
 public:
-	AircraftEnemy(const std::string& image, float maxVelocity, float mass, float health, WeaponsManager::WeaponType weaponType, WeaponsManager::WeaponType weaponType2);
+	enum AI_Type
+	{
+		LEFT_AND_RIGHT,
+		UP_AND_DOWN,
+		DIAGONAL_BACK_AND_FORTH,
+		PEEKABOO_L,
+		PEEKABOO_R,
+		PEEKABOO_T,
+		PEEKABOO_B,
+	};
+
+	AircraftEnemy(const std::string& image, float maxVelocity, float mass, float health, WeaponsManager::WeaponType weaponType, WeaponsManager::WeaponType weaponType2, AI_Type type);
 	~AircraftEnemy();
 	void Update(const float& elapsedTime);			//Updates plane position
 
 private:
+	enum PeekABooType{TOP, BOTTOM, LEFT, RIGHT};
+
+	void MoveUpAndDown();
+	void MoveLeftAndRight();
+	void PeekABoo(PeekABooType peekType);
+
+	void EnforceSpeedLimit();
+
 	static int numEnemies;
 	void FiringRules(const float& elapsedTime);		//Rules for firing weapon
+	AI_Type _AI_type;
+
+	bool b_goUp;
+	bool b_goRight;
 };

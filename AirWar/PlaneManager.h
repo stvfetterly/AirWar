@@ -26,9 +26,13 @@ public:
 		Player_F35
 	};
 	
-	void CreateWave(int numPlanes);
+	static void CreateWave(PlaneType type);
 
 	static Aircraft* CreatePlane(PlaneType type);
 
-
+private:
+	static void StraightTop(PlaneType type, float numberOfPlanes);
+	static void StaggeredTop(PlaneType type, float numberOfPlanes);
+	static void StaggeredRight(PlaneType type, float numberOfPlanes);
+	static void StaggeredLeft(PlaneType type, float numberOfPlanes);
 };

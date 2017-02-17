@@ -77,7 +77,8 @@ void AircraftPlayer::Update(const float& elapsedTime)
 	{
 		_xVelocity -= velocityIncrement;		//Left makes the airplane move left
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
 		_xVelocity += velocityIncrement;	//Right makes the airplane move right
 	}
@@ -86,7 +87,8 @@ void AircraftPlayer::Update(const float& elapsedTime)
 	{
 		_yVelocity += velocityIncrement;	//Down makes the airplane move down
 	}
-	else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
 		_yVelocity -= velocityIncrement;	//Up makes the airplane move up
 	}

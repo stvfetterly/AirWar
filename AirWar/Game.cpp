@@ -34,9 +34,13 @@ void Game::Start(void)
 	_mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "AirWar!");
 	
 	//Create an enemy plane for testing				
-	Aircraft* enemy = PlaneManager::CreatePlane(PlaneManager::Enemy_AS2);
+/*	Aircraft* enemy = PlaneManager::CreatePlane(PlaneManager::Enemy_AS2);
 	enemy->SetPosition(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4);
-	_gameObjectManager.Add(enemy);
+*/
+//	PlaneManager::CreateWave(PlaneManager::Enemy_AS2);
+//	PlaneManager::CreateWave(PlaneManager::Enemy_Dornier335);
+//	PlaneManager::CreateWave(PlaneManager::Enemy_Zero);
+	PlaneManager::CreateWave(PlaneManager::Enemy_SBJ);
 
 
 
