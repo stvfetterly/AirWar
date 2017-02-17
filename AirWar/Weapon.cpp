@@ -7,10 +7,10 @@ int Weapon::numWeapons = 0;
 
 Weapon::Weapon(float xVel, float yVel, WeaponsManager::WeaponType type) : _damage(0.0), _type(type), _firedFrom(ENEMY)
 {
-	const float missileDamage = 50;
+	const float missileDamage = 70;
 	const float bombDamage = 100;
 	const float bulletDamage = 10;
-	const float laserDamage = 45;
+	const float laserDamage = 5;
 
 	_xVelocity = xVel;
 	_yVelocity = yVel;
@@ -111,6 +111,15 @@ void Weapon::Draw(sf::RenderWindow& rw)
 
 void Weapon::Update(const float& elapsedTime)
 {
+	//Missiles speed up the longer they're on screen
+	if (_type == WeaponsManager::SM_MISSILE ||
+		_type == WeaponsManager::MED_MISSILE ||
+		_type == WeaponsManager::LG_MISSILE)
+	{
+		SetXVelocity(GetXVelocity() * (1 + elapsedTime));
+		SetYVelocity(GetYVelocity() * (1 + elapsedTime));
+	}
+
 	//Update location
 	GetSprite().move(GetXVelocity() * elapsedTime, GetYVelocity() * elapsedTime);
 

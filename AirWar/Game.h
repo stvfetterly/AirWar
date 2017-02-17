@@ -13,6 +13,7 @@ public:
 	const static int SCREEN_HEIGHT = 768;
 	const static int MAX_DEGREES = 360;
 	const static int NUM_PADDLES = 2;
+	const static float WAVE_TIME;
 	
 	enum GameDifficulty {Pansy, Wannabe, Hardcore};
 	
@@ -51,6 +52,8 @@ private:
 	static GameObjectManager _gameObjectManager;
 	static WeaponsManager _weaponsManager;
 	static PlaneManager _planeManager;
+
+	static float _timeToNextWave;
 
 	static void AddPlayerAircraft(Aircraft* player);
 };

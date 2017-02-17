@@ -23,6 +23,8 @@ public:
 	void SetFiredFrom(const FiredFrom& newVal) { _firedFrom = newVal; }
 	FiredFrom GetFiredFrom() { return _firedFrom; }
 
+	WeaponsManager::WeaponType GetType() { return _type; }
+
 private:
 	float _damage;			//Amount of damage that a weapon will do
 	static int numWeapons;

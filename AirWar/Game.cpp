@@ -13,6 +13,9 @@ sf::RenderWindow Game::_mainWindow;
 GameObjectManager Game::_gameObjectManager;
 WeaponsManager Game::_weaponsManager;
 PlaneManager Game::_planeManager;
+const static float WAVE_TIME = 10.0f;
+
+float Game::_timeToNextWave = 0.0f;
 
 bool Game::_music = true;
 Game::GameDifficulty Game::_difficulty = Game::Wannabe;
@@ -33,17 +36,6 @@ void Game::Start(void)
 	//Creates main window with specified resolution, 32 bit colour, and a title of AirWar!
 	_mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "AirWar!");
 	
-	//Create an enemy plane for testing				
-/*	Aircraft* enemy = PlaneManager::CreatePlane(PlaneManager::Enemy_AS2);
-	enemy->SetPosition(SCREEN_WIDTH / 4, SCREEN_HEIGHT / 4);
-*/
-//	PlaneManager::CreateWave(PlaneManager::Enemy_AS2);
-//	PlaneManager::CreateWave(PlaneManager::Enemy_Dornier335);
-//	PlaneManager::CreateWave(PlaneManager::Enemy_Zero);
-	PlaneManager::CreateWave(PlaneManager::Enemy_SBJ);
-
-
-
 	//Pause all game objects so they don't start moving while at the splash screen
 	_gameObjectManager.SetPause(true);
 

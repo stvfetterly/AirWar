@@ -6,7 +6,7 @@ class PlaneManager
 public:
 	enum PlaneType
 	{
-		Enemy_AS2,
+		Enemy_AS2 = 0,
 		Enemy_Dornier335,
 		Enemy_F15blue,
 		Enemy_F15navy,
@@ -26,12 +26,16 @@ public:
 		Player_F35
 	};
 	
-	static void CreateWave(PlaneType type);
-
+	static void CreateWave();				//Creates a random wave
+	static void CreateWave(PlaneType type);	//Creates a specific wave
 	static Aircraft* CreatePlane(PlaneType type);
+	static bool isPlayerCreated() { return _isPlayerCreated; }
+	static void SetPlayerCreated(bool newVal) { _isPlayerCreated = newVal; }
 
 private:
+	static bool _isPlayerCreated;
 	static void StraightTop(PlaneType type, float numberOfPlanes);
+	static void StraightBottom(PlaneType type, float numberOfPlanes);
 	static void StaggeredTop(PlaneType type, float numberOfPlanes);
 	static void StaggeredRight(PlaneType type, float numberOfPlanes);
 	static void StaggeredLeft(PlaneType type, float numberOfPlanes);

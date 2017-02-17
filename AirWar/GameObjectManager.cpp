@@ -1,8 +1,11 @@
 #include "stdafx.h"
 #include "GameObjectManager.h"
+#include "PlaneManager.h"
 #include "Game.h"
 
-GameObjectManager::GameObjectManager() : _paused(false)
+const float GameObjectManager::WAVE_INTERVAL = 15.0;
+
+GameObjectManager::GameObjectManager() : _paused(false), _timeToNextWave(0.0)
 {
 }
 GameObjectManager::~GameObjectManager()
@@ -89,6 +92,20 @@ void GameObjectManager::UpdateAll()
 		}
 	}
 
+	if (PlaneManager::isPlayerCreated())
+	{
+		//Check if a new wave should be launched
+		if (_timeToNextWave <= 0.0)
+		{
+			//Launch wave!
+			PlaneManager::CreateWave();
+			_timeToNextWave = WAVE_INTERVAL;
+		}
+		else if (!_paused)
+		{
+			_timeToNextWave -= timeDelta;
+		}
+	}
 }
 
 void GameObjectManager::SetPause(bool pause)

@@ -13,6 +13,8 @@ public:
 		PEEKABOO_R,
 		PEEKABOO_T,
 		PEEKABOO_B,
+		SAW_SHAPED_LR,
+		SAW_SHAPED_UD
 	};
 
 	AircraftEnemy(const std::string& image, float maxVelocity, float mass, float health, WeaponsManager::WeaponType weaponType, WeaponsManager::WeaponType weaponType2, AI_Type type);
@@ -22,8 +24,8 @@ public:
 private:
 	enum PeekABooType{TOP, BOTTOM, LEFT, RIGHT};
 
-	void MoveUpAndDown();
-	void MoveLeftAndRight();
+	void MoveUpAndDown(int topEdge, int bottomEdge);
+	void MoveLeftAndRight(int leftEdge, int rightEdge);
 	void PeekABoo(PeekABooType peekType);
 
 	void EnforceSpeedLimit();

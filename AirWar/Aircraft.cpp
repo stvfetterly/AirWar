@@ -70,6 +70,12 @@ void Aircraft::Stun(const float& stunTime)
 
 void Aircraft::Explode()
 {
+	//If the player has been blown up, record that he's no longer created
+	if (_type == Player)
+	{
+		PlaneManager::SetPlayerCreated(false);
+	}
+
 	//Queue this aircraft to be removed from the game
 	Game::GetGameObjectManager().AddToDeletionQueue(_name);
 	
@@ -119,8 +125,17 @@ void Aircraft::DamageDetection()
 				//Deal damage from the weapon
 				Damage(weapon->GetDamage());
 
-				//After a collision, weapon should disappear
-				Game::GetWeaponsManager().HideObject(weapon);
+				//After a collision, weapon should disappear unless it's a laser
+				if (weapon->GetType() == WeaponsManager::LG_LASER ||
+					weapon->GetType() == WeaponsManager::MED_LASER || 
+					weapon->GetType() == WeaponsManager::SM_LASER )
+				{ 
+					//Let the laser keep going
+				}
+				else
+				{
+					Game::GetWeaponsManager().HideObject(weapon);
+				}
 			}
 		}
 		//Check for aircraft

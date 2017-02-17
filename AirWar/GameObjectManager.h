@@ -21,10 +21,14 @@ public:
 	void AddToDeletionQueue(const std::string& newItem) { _deletionQueue.push_back(newItem); }
 
 private:
+	const static float WAVE_INTERVAL;
+	
 	std::map<std::string, VisibleGameObject*> _gameObjects;
 	std::vector<std::string> _deletionQueue;				//Used to hold a list of objects that should be deleted after update
 	sf::Clock clock;
 	
+	float _timeToNextWave;
+
 	bool _paused;
 
 	struct GameObjectDeallocator

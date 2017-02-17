@@ -51,10 +51,10 @@ void AircraftEnemy::Update(const float& elapsedTime)
 	switch (_AI_type)
 	{
 	case LEFT_AND_RIGHT:
-		MoveLeftAndRight();
+		MoveLeftAndRight(0, Game::SCREEN_WIDTH);
 		break;
 	case UP_AND_DOWN:
-		MoveUpAndDown();
+		MoveUpAndDown(0, Game::SCREEN_HEIGHT);
 		break;
 	case PEEKABOO_B:
 		PeekABoo(BOTTOM);
@@ -69,9 +69,15 @@ void AircraftEnemy::Update(const float& elapsedTime)
 		PeekABoo(RIGHT);
 		break;
 	case DIAGONAL_BACK_AND_FORTH:
-		MoveLeftAndRight();
-		MoveUpAndDown();
+		MoveLeftAndRight(0, Game::SCREEN_WIDTH);
+		MoveUpAndDown(0, Game::SCREEN_HEIGHT);
 		break;
+	case SAW_SHAPED_LR:
+		MoveLeftAndRight(0, Game::SCREEN_WIDTH);
+		MoveUpAndDown(Game::SCREEN_HEIGHT/3, 2* Game::SCREEN_HEIGHT / 3);
+	case SAW_SHAPED_UD:
+		MoveLeftAndRight(Game::SCREEN_WIDTH / 3, 2 * Game::SCREEN_WIDTH / 3);
+		MoveUpAndDown(0, Game::SCREEN_HEIGHT);
 	}
 
 	//Make sure we're not accelerating too quickly
@@ -84,19 +90,19 @@ void AircraftEnemy::Update(const float& elapsedTime)
 	GetSprite().move(_xVelocity * elapsedTime, _yVelocity * elapsedTime);
 }
 
-void AircraftEnemy::MoveUpAndDown()
+void AircraftEnemy::MoveUpAndDown(int topEdge, int bottomEdge)
 {
 	//A faster aircraft increments velocity faster
 	float velocityIncrement = 1 + (_maxVelocity / Aircraft::VERY_SLOW_AIRCRAFT_SPEED);
 
 	//If we go off the top of the screen, start heading the other way
-	if (GetPosition().y < 0.0)
+	if (GetPosition().y < topEdge)
 	{
 		_yVelocity += velocityIncrement;
 		b_goUp = false;
 	}
 	//If we go off the bottom, start heading the other way
-	else if (GetPosition().y > Game::SCREEN_HEIGHT)
+	else if (GetPosition().y > bottomEdge)
 	{
 		_yVelocity -= velocityIncrement;
 		b_goUp = true;
@@ -113,19 +119,19 @@ void AircraftEnemy::MoveUpAndDown()
 	}
 }
 
-void AircraftEnemy::MoveLeftAndRight()
+void AircraftEnemy::MoveLeftAndRight(int leftEdge, int rightEdge)
 {
 	//A faster aircraft increments velocity faster
 	float velocityIncrement = 1 + (_maxVelocity / Aircraft::VERY_SLOW_AIRCRAFT_SPEED);
 
 	//If we go off the left of the screen, start heading right
-	if (GetPosition().x < 0.0)
+	if (GetPosition().x < leftEdge)
 	{
 		_xVelocity += velocityIncrement;
 		b_goRight = true;
 	}
 	//If we go off the right, start heading left
-	else if (GetPosition().x > Game::SCREEN_WIDTH)
+	else if (GetPosition().x > rightEdge)
 	{
 		_xVelocity -= velocityIncrement;
 		b_goRight = false;

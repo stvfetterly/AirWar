@@ -80,29 +80,29 @@ float WeaponsManager::GetRateOfFire(const WeaponType& weapon)
 	switch (weapon)
 	{
 	case WeaponsManager::SM_MISSILE:
-		return 0.15f;
+		return 0.08f;
 	case WeaponsManager::MED_MISSILE:
-		return 0.22f;
+		return 0.17f;
 	case WeaponsManager::LG_MISSILE:
 		return 0.28f;
 	case WeaponsManager::SM_BULLET:
 		return 0.025f;
 	case WeaponsManager::MED_BULLET:
-		return 0.1f;
+		return 0.7f;
 	case WeaponsManager::LG_BULLET:
 		return 0.2f;
 	case WeaponsManager::SM_BOMB:
 		return 0.1f;
 	case WeaponsManager::MED_BOMB:
-		return 0.25f;
+		return 0.2f;
 	case WeaponsManager::LG_BOMB:
 		return 0.5f;
 	case WeaponsManager::SM_LASER:
-		return 0.1f;
+		return 0.25f;
 	case WeaponsManager::MED_LASER:
-		return 0.28f;
+		return 0.35f;
 	case WeaponsManager::LG_LASER:
-		return 0.3f;
+		return 0.45f;
 	case WeaponsManager::TOTAL_WEAPONS:
 		//TODO: Should never get here
 		break;
@@ -118,11 +118,11 @@ float WeaponsManager::GetWeaponSpeed(const WeaponType& weapon)
 	switch (weapon)
 	{
 	case WeaponsManager::SM_MISSILE:
-		return 1100.0f;
+		return 300.0f;
 	case WeaponsManager::MED_MISSILE:
-		return 1000.0f;
+		return 170.0f;
 	case WeaponsManager::LG_MISSILE:
-		return 900.0f;
+		return 100.0f;
 	case WeaponsManager::SM_BULLET:
 		return 1200.0f;
 	case WeaponsManager::MED_BULLET:
@@ -136,11 +136,11 @@ float WeaponsManager::GetWeaponSpeed(const WeaponType& weapon)
 	case WeaponsManager::LG_BOMB:
 		return 800.0f;
 	case WeaponsManager::SM_LASER:
-		return 1200.0f;
+		return 1600.0f;
 	case WeaponsManager::MED_LASER:
-		return 1100.0f;
+		return 1600.0f;
 	case WeaponsManager::LG_LASER:
-		return 1000.0f;
+		return 1600.0f;
 	case WeaponsManager::TOTAL_WEAPONS:
 		//TODO: Should never get here
 		break;
