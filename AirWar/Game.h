@@ -59,8 +59,7 @@ private:
 	static sf::Texture _backgroundImage;
 	static sf::Texture _backgroundImage2;
 	static sf::Sprite _background;
+	static sf::Sprite _backgroundInv;
 
 	static float _timeToNextWave;
-
-	static void AddPlayerAircraft(Aircraft* player);
 };
