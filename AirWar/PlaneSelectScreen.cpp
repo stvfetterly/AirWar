@@ -64,6 +64,9 @@ PlaneSelectScreen::MenuResult PlaneSelectScreen::Show(sf::RenderWindow& window)
 	image.loadFromFile("images/menu/PlaneSelectMenu.png");
 	sf::Sprite sprite(image);
 
+	//Clears the window before trying to draw stuff
+	window.clear(sf::Color(0, 0, 0));
+
 	//Draw the plane select menu
 	window.draw(sprite);
 	window.display();

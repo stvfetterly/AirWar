@@ -101,9 +101,13 @@ void MainMenu::UpdateBox(sf::RenderWindow& window, sf::Sprite& updateSprite, boo
 //Show the main menu image, set up the clickable coordinates for option selection
 MainMenu::MenuResult MainMenu::Show(sf::RenderWindow& window)
 {
+	//Clears the window before trying to draw stuff
+	window.clear(sf::Color(0, 0, 0));
+
 	//Load menu image from file
 	sf::Texture image;
-	image.loadFromFile("images/Menu/mainmenu.png");
+	assert(image.loadFromFile("images/Menu/mainmenu.png"));
+	//image.loadFromFile("Images/Backgrounds/TestBackground.png");
 	sf::Sprite sprite(image);
 
 	//Load checkboxes

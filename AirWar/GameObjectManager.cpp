@@ -73,6 +73,8 @@ void GameObjectManager::UpdateAll()
 	//finds the amount of time since last frame
 	float timeDelta = clock.restart().asSeconds();
 
+	Game::ShowBackground(timeDelta);
+
 	for (auto itr = _gameObjects.begin(); itr != _gameObjects.end(); ++itr)
 	{
 		//Only update items if they aren't paused

@@ -120,6 +120,9 @@ void Boom::Update(const float& elapsedTime)
 		if (_animationCellDisplayed < _fileNameList.size())
 		{
 			Load(_fileNameList[_animationCellDisplayed]);
+
+			//Make explosions half transparent
+			GetSprite().setColor(sf::Color(255, 255, 255, 200));
 		}
 
 		//Keep sprite rotation the same

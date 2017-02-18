@@ -13,9 +13,11 @@ sf::RenderWindow Game::_mainWindow;
 GameObjectManager Game::_gameObjectManager;
 WeaponsManager Game::_weaponsManager;
 PlaneManager Game::_planeManager;
-const static float WAVE_TIME = 10.0f;
-
-float Game::_timeToNextWave = 0.0f;
+sf::Texture Game::_backgroundImage;
+sf::Texture Game::_backgroundImage2;
+sf::Sprite Game::_background;
+float Game::_backgroundImagePixels = 0.0f;
+bool Game::_backgroundInverted = false;
 
 bool Game::_music = true;
 Game::GameDifficulty Game::_difficulty = Game::Wannabe;
@@ -36,6 +38,11 @@ void Game::Start(void)
 	//Creates main window with specified resolution, 32 bit colour, and a title of AirWar!
 	_mainWindow.create(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT, 32), "AirWar!");
 	
+	//Load background image textures
+	//Problem if no background found
+	assert(_backgroundImage.loadFromFile("Images/Backgrounds/TestBackground3.png"));
+	assert(_backgroundImage2.loadFromFile("Images/Backgrounds/TestBackground2.png"));
+
 	//Pause all game objects so they don't start moving while at the splash screen
 	_gameObjectManager.SetPause(true);
 
@@ -63,6 +70,61 @@ bool Game::IsExiting()
 	}
 }
 
+//Shows/updates the background image
+void Game::ShowBackground(const float& timeChange)
+{
+	//Clears all items that we may be trying to draw from _mainwindow
+	_mainWindow.clear(sf::Color(0, 0, 0));
+
+
+	if (_backgroundInverted)
+	{
+		//Go down the inverted image
+		_backgroundImagePixels += (timeChange * 300);
+	}
+	else
+	{
+		//Go up the regular image
+		_backgroundImagePixels -= (timeChange * 300);
+	}
+
+
+	//Background Pixels go from:
+	// size of the picture - screen height = bottom screen of image    to
+	// zero, then wrap over to
+	// -size of the picture + screen height = top most inversion of image
+	if (_backgroundImagePixels < 0.0)
+	{
+		//We're going to go down from the top of the inverted picture now
+		_backgroundInverted = true;
+
+		//Show a screen worth of the inverted image - Get top of screen, add the height of the screen
+		_backgroundImagePixels = 0.0 + static_cast<float>(Game::SCREEN_HEIGHT * 2);
+	}
+	else if (_backgroundImagePixels > _backgroundImage.getSize().y /*+ Game::SCREEN_HEIGHT THIS IS THE MISSING HEIGHT*/)
+	{
+		//We're going to go up from the bottom of the inverted picture now
+		_backgroundInverted = false;
+
+		//Show a screen worth of the regular image - Get bottom of screen, subtract height of screen
+		_backgroundImagePixels = _backgroundImage.getSize().y - (static_cast<float>(Game::SCREEN_HEIGHT * 2));
+	}
+
+	if (_backgroundInverted)
+	{
+		//negative game height is passed in to mirror image around x axis
+		_background.setTextureRect(sf::IntRect(0, static_cast<int>(_backgroundImagePixels), Game::SCREEN_WIDTH, -Game::SCREEN_HEIGHT));
+	}
+	else
+	{
+		_background.setTextureRect(sf::IntRect(0, static_cast<int>(_backgroundImagePixels), Game::SCREEN_WIDTH, Game::SCREEN_HEIGHT));
+	}
+	_background.setTexture(_backgroundImage);
+
+	//Get ready to draw background image
+	_mainWindow.draw(_background);
+}
+
 //This is where everything happens in the game
 void Game::GameLoop()
 {
@@ -88,16 +150,17 @@ void Game::GameLoop()
 	{
 		//User is playing the game
 		case Game::Playing:
-			//Clears screen to black
-			_mainWindow.clear(sf::Color(0, 0, 0));
 
 			//Update the positions of objects
 			_gameObjectManager.UpdateAll();
 
-			//Update display
+			//Get ready to draw the background image
+			//ShowBackground();
+
+			//Get ready to draw all moving game objects over the background
 			_gameObjectManager.DrawAll(_mainWindow);
 
-			//Displays the screen
+			//Draw all game objects over the background
 			_mainWindow.display();
 
 			//If we get an exiting event, close the game
@@ -147,7 +210,7 @@ void Game::ShowSplashScreen()
 	_gameState = Game::ShowingSplash;
 	SplashScreen splashScreen;
 	splashScreen.Show(_mainWindow);
-	
+
 	//After user has clicked on splash screen, go to main menu
 	_gameState = Game::ShowingMenu;
 }
@@ -186,35 +249,6 @@ void Game::ShowPlaneSelect()
 		//Clicked on a part of the screen that does nothing - do nothing!
 		break;
 	}
-
-	//Plane selected, let's start playing the game!
-	_gameState = Game::Playing;
-
-	//Start all the visible objects moving!
-	_gameObjectManager.SetPause(false);
-}
-
-void Game::AddPlayerAircraft(Aircraft* player)
-{
-	//Set the name to 'Player' for fast lookup later!
-	player->SetName("Player");
-
-	//Start player in middle of screen
-	player->SetPosition(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2);
-
-	//If the player has gone back to the main menu to select a different plane, 
-	//update the health of this new plane to match the percentage of the previous one
-	Aircraft* oldPlane = dynamic_cast<Aircraft*>(_gameObjectManager.Get("Player"));
-	if (oldPlane != NULL)
-	{
-		float healthPercentage = oldPlane->GetHealth() / oldPlane->GetFullHealth();
-		player->SetHealth(player->GetFullHealth() * healthPercentage);
-
-		//Remove the old plane
-		_gameObjectManager.Remove("Player");
-	}
-
-	_gameObjectManager.Add(player);
 
 	//Plane selected, let's start playing the game!
 	_gameState = Game::Playing;
