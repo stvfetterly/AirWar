@@ -57,9 +57,9 @@ void Aircraft::Fire(const float& xVel, const float& yVel, const WeaponsManager::
 
 void Aircraft::Damage(const float& damageAmount)
 {
-	_fullHealth -= damageAmount;
+	_health -= damageAmount;
 
-	if (_fullHealth < 0)
+	if (_health < 0)
 		Explode();
 }
 

@@ -1,15 +1,18 @@
 #include "stdafx.h"
 #include "Game.h"
 #include "BackgroundManager.h"
+#include "Cloud.h"
 
 
 sf::Texture BackgroundManager::_backgroundImage[NUM_BACKGROUNDS];
 sf::Sprite BackgroundManager::_background;
 sf::Sprite BackgroundManager::_backgroundInv;
 
+const float BackgroundManager::TIME_BETWEEN_CLOUDS = 30;
+float BackgroundManager::_cloudTimer = 0.0;
 float BackgroundManager::_backgroundImagePixels = Game::SCREEN_HEIGHT;
 bool BackgroundManager::_backgroundInverted = false;
-
+int BackgroundManager::SPEED_OF_BACKGROUND_IMAGE = 200;
 
 BackgroundManager::BackgroundManager():_type(LOUISIANA)
 {
@@ -30,10 +33,38 @@ void BackgroundManager::LoadTextures()
 	assert(_backgroundImage[SIBERIA].loadFromFile("Images/Backgrounds/BG-Siberia.png"));
 }
 
+void BackgroundManager::GenerateClouds(const float& timeChange)
+{
+	if (_cloudTimer <= 0.0)
+	{
+		//reset the timer
+		_cloudTimer = TIME_BETWEEN_CLOUDS;
+
+		//Make a cloud
+		Cloud* newCloud = new Cloud(Cloud::Light, 1.0f);
+
+		//Make it a particular size
+		//newCloud->GetSprite().setScale()
+
+		//Make it move left to right
+		//newCloud->SetXVelocity(newCloud->GetXVelocity() + 5.0f);
+
+		//Set it just off the upper left of the screen
+//		newCloud->SetPosition( -newCloud->GetWidth() / 2.0f, -newCloud->GetHeight() / 2.0f );
+		//Set cloud at top of screen
+		newCloud->SetPosition(Game::SCREEN_WIDTH / 2, -newCloud->GetHeight() / 2.0f);
+		//newCloud->SetPosition(Game::SCREEN_WIDTH, Game::SCREEN_HEIGHT);
+
+		Game::GetGameObjectManager().Add(newCloud);
+	}
+	else
+	{
+		_cloudTimer -= timeChange;
+	}
+}
+
 void BackgroundManager::Update(const float& timeChange)
 {
-	int SPEED_OF_BACKGROUND_IMAGE;
-
 	switch(_type)
 	{
 	case NEW_YORK:
@@ -141,5 +172,7 @@ void BackgroundManager::Update(const float& timeChange)
 		Game::GetWindow().draw(_background);
 		Game::GetWindow().draw(_backgroundInv);
 	}
+
+	GenerateClouds(timeChange);
 }
 

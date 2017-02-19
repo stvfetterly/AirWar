@@ -141,4 +141,10 @@ void Boom::Update(const float& elapsedTime)
 	{
 		Game::GetGameObjectManager().AddToDeletionQueue(_name);
 	}
+
+	//Update y velocity so that the booms scroll down the screen based on background speed
+	SetYVelocity(BackgroundManager::SPEED_OF_BACKGROUND_IMAGE * elapsedTime);
+
+	//Update location
+	GetSprite().move(GetXVelocity() * elapsedTime, GetYVelocity() * elapsedTime);
 }

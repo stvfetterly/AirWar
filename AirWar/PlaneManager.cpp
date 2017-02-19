@@ -3,6 +3,7 @@
 #include "AircraftEnemy.h"
 #include "AircraftPlayer.h"
 #include "PlaneManager.h"
+#include "HealthBar.h"
 
 bool PlaneManager::_isPlayerCreated = false;
 float PlaneManager::_timeToNextWave = 0.0f;
@@ -53,19 +54,19 @@ Aircraft* PlaneManager::CreatePlane(PlaneManager::PlaneType type)
 		plane = new AircraftEnemy("images/aircraft/enemy/Zero.png", Aircraft::AVG_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 50, WeaponsManager::MED_LASER, WeaponsManager::MED_LASER, AircraftEnemy::LEFT_AND_RIGHT);
 		break;
 	case Player_J31:
-		plane = new AircraftPlayer("images/aircraft/player/J31Yellow.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_LIGHT_AIRCRAFT_MASS, 500, WeaponsManager::SM_BULLET, WeaponsManager::SM_BOMB);
+		plane = new AircraftPlayer("images/aircraft/player/J31Yellow.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_LIGHT_AIRCRAFT_MASS, 600, WeaponsManager::SM_BULLET, WeaponsManager::SM_BOMB);
 		break;
 	case Player_J20:
-		plane = new AircraftPlayer("images/aircraft/player/J20Pink.png", Aircraft::VERY_SLOW_AIRCRAFT_SPEED, Aircraft::VERY_HEAVY_AIRCRAFT_MASS, 500, WeaponsManager::MED_MISSILE, WeaponsManager::LG_BOMB);
+		plane = new AircraftPlayer("images/aircraft/player/J20Pink.png", Aircraft::VERY_SLOW_AIRCRAFT_SPEED, Aircraft::VERY_HEAVY_AIRCRAFT_MASS, 1500, WeaponsManager::MED_MISSILE, WeaponsManager::LG_BOMB);
 		break;
 	case Player_T50:
-		plane = new AircraftPlayer("images/aircraft/player/T50.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_HEAVY_AIRCRAFT_MASS, 500, WeaponsManager::LG_LASER, WeaponsManager::LG_BOMB);
+		plane = new AircraftPlayer("images/aircraft/player/T50.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_HEAVY_AIRCRAFT_MASS, 850, WeaponsManager::LG_LASER, WeaponsManager::LG_BOMB);
 		break;
 	case Player_F22:
-		plane = new AircraftPlayer("images/aircraft/player/F22orange.png", Aircraft::FAST_AIRCRAFT_SPEED, Aircraft::LIGHT_AIRCRAFT_MASS, 500, WeaponsManager::SM_MISSILE, WeaponsManager::SM_BOMB);
+		plane = new AircraftPlayer("images/aircraft/player/F22orange.png", Aircraft::FAST_AIRCRAFT_SPEED, Aircraft::LIGHT_AIRCRAFT_MASS, 700, WeaponsManager::SM_MISSILE, WeaponsManager::SM_BOMB);
 		break;
 	case Player_F35:
-		plane = new AircraftPlayer("images/aircraft/player/F35red.png", Aircraft::AVG_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 500, WeaponsManager::LG_BULLET, WeaponsManager::MED_BOMB);
+		plane = new AircraftPlayer("images/aircraft/player/F35red.png", Aircraft::AVG_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 1000, WeaponsManager::LG_BULLET, WeaponsManager::MED_BOMB);
 		break;
 	default:
 		//TODO - ERROR, should never get here
@@ -93,6 +94,14 @@ Aircraft* PlaneManager::CreatePlane(PlaneManager::PlaneType type)
 			plane->SetPosition(Game::SCREEN_WIDTH / 2, Game::SCREEN_HEIGHT / 2);
 			_isPlayerCreated = true;
 		}
+
+		//Make a health bar
+		HealthBar* playerHealth = new HealthBar("PlayerHealth");
+
+		//Set it to the middle, bottom of screen
+		playerHealth->SetPosition(Game::SCREEN_WIDTH / 2, Game::SCREEN_HEIGHT - (playerHealth->GetHeight() * 2));
+
+		playerHealth->AddToObjectManager();
 	}
 
 	if (NULL != plane)

@@ -149,6 +149,8 @@
     <ClInclude Include="AircraftPlayer.h" />
     <ClInclude Include="BackgroundManager.h" />
     <ClInclude Include="Boom.h" />
+    <ClInclude Include="Cloud.h" />
+    <ClInclude Include="HealthBar.h" />
     <ClInclude Include="PlaneManager.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObjectManager.h" />
@@ -173,6 +175,8 @@
     <ClCompile Include="AirWar.cpp" />
     <ClCompile Include="BackgroundManager.cpp" />
     <ClCompile Include="Boom.cpp" />
+    <ClCompile Include="Cloud.cpp" />
+    <ClCompile Include="HealthBar.cpp" />
     <ClCompile Include="PlaneManager.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameObjectManager.cpp" />
