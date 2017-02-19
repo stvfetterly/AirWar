@@ -147,6 +147,7 @@
     <ClInclude Include="Aircraft.h" />
     <ClInclude Include="AircraftEnemy.h" />
     <ClInclude Include="AircraftPlayer.h" />
+    <ClInclude Include="BackgroundManager.h" />
     <ClInclude Include="Boom.h" />
     <ClInclude Include="PlaneManager.h" />
     <ClInclude Include="Game.h" />
@@ -170,6 +171,7 @@
     <ClCompile Include="AircraftEnemy.cpp" />
     <ClCompile Include="AircraftPlayer.cpp" />
     <ClCompile Include="AirWar.cpp" />
+    <ClCompile Include="BackgroundManager.cpp" />
     <ClCompile Include="Boom.cpp" />
     <ClCompile Include="PlaneManager.cpp" />
     <ClCompile Include="Game.cpp" />

@@ -120,12 +120,9 @@ void Boom::Update(const float& elapsedTime)
 		if (_animationCellDisplayed < _fileNameList.size())
 		{
 			Load(_fileNameList[_animationCellDisplayed]);
-
-			//Make explosions half transparent
-			GetSprite().setColor(sf::Color(255, 255, 255, 200));
 		}
 
-		//Keep sprite rotation the same
+		//Keep all sprite rotation the same randomly generated number
 		GetSprite().setRotation(_rotation);
 
 		//Figure out what the center of the plane is, and use the X and Y of this position as the origin

@@ -21,6 +21,7 @@
 #include <SFML/Audio.hpp>
 
 #include <map>				//std::map data structure
+#include <unordered_map>	
 #include <vector>			//use vectors!
 #include <list>				//std::list data structure
 #include <iostream>			//allow cin/cout operations

@@ -31,9 +31,15 @@ public:
 	static Aircraft* CreatePlane(PlaneType type);
 	static bool isPlayerCreated() { return _isPlayerCreated; }
 	static void SetPlayerCreated(bool newVal) { _isPlayerCreated = newVal; }
+	
+	static void Update(const float& elapsedTime);
 
 private:
+	static const float WAVE_INTERVAL;
+
+	static float _timeToNextWave;
 	static bool _isPlayerCreated;
+
 	static void StraightTop(PlaneType type, float numberOfPlanes);
 	static void StraightBottom(PlaneType type, float numberOfPlanes);
 	static void StaggeredTop(PlaneType type, float numberOfPlanes);

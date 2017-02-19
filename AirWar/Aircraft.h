@@ -12,7 +12,7 @@ public:
 	const static float AVG_AIRCRAFT_SPEED;
 	const static float SLOW_AIRCRAFT_SPEED;
 	const static float VERY_SLOW_AIRCRAFT_SPEED;
-	
+
 	const static float VERY_HEAVY_AIRCRAFT_MASS;
 	const static float HEAVY_AIRCRAFT_MASS;
 	const static float AVG_AIRCRAFT_MASS;
@@ -20,7 +20,7 @@ public:
 	const static float VERY_LIGHT_AIRCRAFT_MASS;
 
 	enum ControlType { Player, AIEnemy, AIWingman };
-	
+
 	Aircraft();
 	virtual ~Aircraft();
 
@@ -57,6 +57,4 @@ protected:
 
 	WeaponsManager::WeaponType _weaponType;		//Keeps track of the pirmary type of weapon that this plane is using
 	WeaponsManager::WeaponType _weaponType2;	//Keeps track of the secondary type of weapon that this plane is using
-
-
 };

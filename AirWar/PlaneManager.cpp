@@ -5,6 +5,8 @@
 #include "PlaneManager.h"
 
 bool PlaneManager::_isPlayerCreated = false;
+float PlaneManager::_timeToNextWave = 0.0f;
+const float PlaneManager::WAVE_INTERVAL = 15.0f;
 
 Aircraft* PlaneManager::CreatePlane(PlaneManager::PlaneType type)
 {
@@ -216,6 +218,25 @@ void PlaneManager::StaggeredRight(PlaneType type, float numberOfPlanes)
 	{
 		Aircraft* newplane = CreatePlane(type);
 		newplane->SetPosition(Game::SCREEN_WIDTH + (newplane->GetWidth() * i * 4), Game::SCREEN_HEIGHT / (numberOfPlanes + 1) * i);
+	}
+}
+
+void PlaneManager::Update(const float& elapsedTime)
+{
+	//Only create more enemy waves if a player exists!
+	if (isPlayerCreated())
+	{
+		//Check if a new wave should be launched
+		if (_timeToNextWave <= 0.0)
+		{
+			//Launch wave!
+			PlaneManager::CreateWave();
+			_timeToNextWave = WAVE_INTERVAL;
+		}
+		else
+		{
+			_timeToNextWave -= elapsedTime;
+		}
 	}
 }
 

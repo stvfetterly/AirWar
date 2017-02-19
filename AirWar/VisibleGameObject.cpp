@@ -1,5 +1,6 @@
 #include "stdafx.h"
 #include "VisibleGameObject.h"
+#include "Game.h"
 
 int VisibleGameObject::numObjects = 0;
 
@@ -13,26 +14,34 @@ VisibleGameObject::VisibleGameObject() : _isLoaded(false), _filename(""), _isPau
 //Destructor
 VisibleGameObject::~VisibleGameObject()
 {
-	numObjects--;
 }
 
 void VisibleGameObject::Load(const std::string& filename)
 {
-	//if we fail to load the image, reset variables
-	if (_image.loadFromFile(filename) == false)
+	//If a texture doesn't exist then load from file
+	if (Game::GetGameObjectManager().GetObjectTextureMap().count(filename) == 0)
 	{
-		_filename = "";
-		_isLoaded = false;
+		//if we fail to load the image, reset variables
+		if (_image.loadFromFile(filename) == false)
+		{
+			_filename = "";
+			_isLoaded = false;
+			return;
+		}
+		else //Loads the image
+		{
+			Game::GetGameObjectManager().GetObjectTextureMap().insert(std::pair<std::string, sf::Texture>(_filename, _image));
+			_sprite.setTexture(_image, true);
+		}
 	}
-	else //Loads the image
+	else
 	{
-		_filename = filename;
-
-		//Smooths the image out
-		//_image.setSmooth(true);
+		_image = Game::GetGameObjectManager().GetObjectTextureMap()[filename];
 		_sprite.setTexture(_image, true);
-		_isLoaded = true;
 	}
+
+	_filename = filename;
+	_isLoaded = true;
 }
 
 void VisibleGameObject::Draw(sf::RenderWindow& renderWindow)

@@ -1,19 +1,14 @@
 #include "stdafx.h"
 #include "GameObjectManager.h"
-#include "PlaneManager.h"
 #include "Game.h"
+#include "BackgroundManager.h"
 
-const float GameObjectManager::WAVE_INTERVAL = 15.0;
 
-GameObjectManager::GameObjectManager() : _paused(false), _timeToNextWave(0.0)
+GameObjectManager::GameObjectManager() : _paused(false)
 {
 }
 GameObjectManager::~GameObjectManager()
 {
-	for (auto itr = _gameObjects.begin(); itr != _gameObjects.end(); ++itr)
-	{
-		//itr.GameObjectDeallocator();
-	}
 	std::for_each(_gameObjects.begin(), _gameObjects.end(), GameObjectDeallocator());
 }
 
@@ -73,8 +68,6 @@ void GameObjectManager::UpdateAll()
 	//finds the amount of time since last frame
 	float timeDelta = clock.restart().asSeconds();
 
-	Game::ShowBackground(timeDelta);
-
 	for (auto itr = _gameObjects.begin(); itr != _gameObjects.end(); ++itr)
 	{
 		//Only update items if they aren't paused
@@ -94,19 +87,10 @@ void GameObjectManager::UpdateAll()
 		}
 	}
 
-	if (PlaneManager::isPlayerCreated())
+	if (!_paused)
 	{
-		//Check if a new wave should be launched
-		if (_timeToNextWave <= 0.0)
-		{
-			//Launch wave!
-			PlaneManager::CreateWave();
-			_timeToNextWave = WAVE_INTERVAL;
-		}
-		else if (!_paused)
-		{
-			_timeToNextWave -= timeDelta;
-		}
+		PlaneManager::Update(timeDelta);
+		Game::GetBackgroundManager().Update(timeDelta);
 	}
 }
 

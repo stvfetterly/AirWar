@@ -20,15 +20,15 @@ public:
 	std::vector<VisibleGameObject*> GetCollisionList(const sf::Rect<float>& objRect);
 	void AddToDeletionQueue(const std::string& newItem) { _deletionQueue.push_back(newItem); }
 
+	std::map<std::string, sf::Texture>& GetObjectTextureMap() { return _textureMap; }
+
 private:
-	const static float WAVE_INTERVAL;
-	
 	std::map<std::string, VisibleGameObject*> _gameObjects;
+	std::map<std::string, sf::Texture> _textureMap;		//Keeps a hashmap of textures to prevent re-loading of images for speeding up performance of game objects
+
 	std::vector<std::string> _deletionQueue;				//Used to hold a list of objects that should be deleted after update
 	sf::Clock clock;
 	
-	float _timeToNextWave;
-
 	bool _paused;
 
 	struct GameObjectDeallocator
