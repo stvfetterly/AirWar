@@ -190,8 +190,11 @@ void Game::ShowPlaneSelect()
 	//Plane selected, let's start playing the game!
 	_gameState = Game::Playing;
 
-	//Start all the visible objects moving!
-	_gameObjectManager.SetPause(false);
+	//Start all the visible objects moving if they're currently paused!
+	if (_gameObjectManager.GetPause())
+	{
+		_gameObjectManager.SetPause(false);
+	}
 }
 
 //Displays main menu, allows user to play game or exit

@@ -194,6 +194,7 @@ void GameObjectManager::UpdateAll()
 		{
 			Remove(*itr);
 		}
+		_deletionQueue.clear();
 	}
 
 	if (!_paused)

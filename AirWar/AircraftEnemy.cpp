@@ -255,7 +255,7 @@ void AircraftEnemy::FiringRules(const float& elapsedTime)
 	if (_rateOfFire2 <= 0.0)
 	{
 		//Fire from behind for secondary fire
-		angle = 360.0f - angle;
+		angle = (360 * M_PI / 180) - angle;
 
 		//Fire based on plane angle
 		xVel = std::sinf(angle) * WeaponsManager::GetWeaponSpeed(_weaponType2);
