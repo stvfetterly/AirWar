@@ -15,43 +15,43 @@ Aircraft* PlaneManager::CreatePlane(PlaneManager::PlaneType type)
 	switch (type)
 	{
 	case Enemy_AS2:
-		plane = new AircraftEnemy("images/aircraft/enemy/AS2.png", Aircraft::VERY_SLOW_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 500, WeaponsManager::MED_LASER, WeaponsManager::MED_LASER, AircraftEnemy::UP_AND_DOWN);
+		plane = new AircraftEnemy("images/aircraft/enemy/AS2.png", Aircraft::VERY_SLOW_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 500, WeaponsManager::MED_LASER, WeaponsManager::MED_BOMB, AircraftEnemy::UP_AND_DOWN);
 		break;
 	case Enemy_Dornier335:
-		plane = new AircraftEnemy("images/aircraft/enemy/Dornier335.png", Aircraft::AVG_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 50, WeaponsManager::MED_LASER, WeaponsManager::MED_LASER, AircraftEnemy::LEFT_AND_RIGHT);
+		plane = new AircraftEnemy("images/aircraft/enemy/Dornier335.png", Aircraft::AVG_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 50, WeaponsManager::SM_BULLET, WeaponsManager::SM_BOMB, AircraftEnemy::LEFT_AND_RIGHT);
 		break;
 	case Enemy_F15blue:
-		plane = new AircraftEnemy("images/aircraft/enemy/F15blue.png", Aircraft::SLOW_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 100, WeaponsManager::MED_LASER, WeaponsManager::MED_LASER, AircraftEnemy::SAW_SHAPED_LR);
+		plane = new AircraftEnemy("images/aircraft/enemy/F15blue.png", Aircraft::SLOW_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 100, WeaponsManager::MED_BULLET, WeaponsManager::MED_BOMB, AircraftEnemy::SAW_SHAPED_LR);
 		break;
 	case Enemy_F15navy:
-		plane = new AircraftEnemy("images/aircraft/enemy/F15navy.png", Aircraft::SLOW_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 100, WeaponsManager::MED_LASER, WeaponsManager::MED_LASER, AircraftEnemy::SAW_SHAPED_UD);
+		plane = new AircraftEnemy("images/aircraft/enemy/F15navy.png", Aircraft::SLOW_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 100, WeaponsManager::MED_BULLET, WeaponsManager::MED_BOMB, AircraftEnemy::SAW_SHAPED_UD);
 		break;
 	case Enemy_F22b:
-		plane = new AircraftEnemy("images/aircraft/enemy/F22b.png", Aircraft::SLOW_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 150, WeaponsManager::MED_LASER, WeaponsManager::MED_LASER, AircraftEnemy::SAW_SHAPED_LR);
+		plane = new AircraftEnemy("images/aircraft/enemy/F22b.png", Aircraft::SLOW_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 150, WeaponsManager::SM_MISSILE, WeaponsManager::SM_BOMB, AircraftEnemy::SAW_SHAPED_LR);
 		break;
 	case Enemy_F35b:
-		plane = new AircraftEnemy("images/aircraft/enemy/F35b.png", Aircraft::SLOW_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 175, WeaponsManager::MED_LASER, WeaponsManager::MED_LASER, AircraftEnemy::SAW_SHAPED_LR);
+		plane = new AircraftEnemy("images/aircraft/enemy/F35b.png", Aircraft::SLOW_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 175, WeaponsManager::LG_BULLET, WeaponsManager::MED_BOMB, AircraftEnemy::SAW_SHAPED_LR);
 		break;
 	case Enemy_FuturePlane:
-		plane = new AircraftEnemy("images/aircraft/enemy/FuturePlane.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 500, WeaponsManager::LG_LASER, WeaponsManager::MED_LASER, AircraftEnemy::PEEKABOO_B);
+		plane = new AircraftEnemy("images/aircraft/enemy/FuturePlane.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 500, WeaponsManager::LG_LASER, WeaponsManager::LG_MISSILE, AircraftEnemy::PEEKABOO_B);
 		break;
 	case Enemy_SBJ:
-		plane = new AircraftEnemy("images/aircraft/enemy/SBJ.png", Aircraft::AVG_AIRCRAFT_SPEED, Aircraft::VERY_LIGHT_AIRCRAFT_MASS, 20, WeaponsManager::MED_LASER, WeaponsManager::MED_LASER, AircraftEnemy::DIAGONAL_BACK_AND_FORTH);
+		plane = new AircraftEnemy("images/aircraft/enemy/SBJ.png", Aircraft::AVG_AIRCRAFT_SPEED, Aircraft::VERY_LIGHT_AIRCRAFT_MASS, 20, WeaponsManager::SM_LASER, WeaponsManager::SM_BULLET, AircraftEnemy::DIAGONAL_BACK_AND_FORTH);
 		break;
 	case Enemy_SU27:
-		plane = new AircraftEnemy("images/aircraft/enemy/SU27.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_LIGHT_AIRCRAFT_MASS, 220, WeaponsManager::MED_LASER, WeaponsManager::MED_LASER, AircraftEnemy::PEEKABOO_T);
+		plane = new AircraftEnemy("images/aircraft/enemy/SU27.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_LIGHT_AIRCRAFT_MASS, 220, WeaponsManager::MED_MISSILE, WeaponsManager::MED_BOMB, AircraftEnemy::PEEKABOO_T);
 		break;
 	case Enemy_SU27b:
-		plane = new AircraftEnemy("images/aircraft/enemy/SU27b.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_LIGHT_AIRCRAFT_MASS, 245, WeaponsManager::MED_LASER, WeaponsManager::MED_LASER, AircraftEnemy::PEEKABOO_R);
+		plane = new AircraftEnemy("images/aircraft/enemy/SU27b.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_LIGHT_AIRCRAFT_MASS, 245, WeaponsManager::SM_MISSILE, WeaponsManager::LG_BOMB, AircraftEnemy::PEEKABOO_R);
 		break;
 	case Enemy_SU30:
-		plane = new AircraftEnemy("images/aircraft/enemy/SU30.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_LIGHT_AIRCRAFT_MASS, 250, WeaponsManager::MED_LASER, WeaponsManager::MED_LASER, AircraftEnemy::PEEKABOO_L);
+		plane = new AircraftEnemy("images/aircraft/enemy/SU30.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_LIGHT_AIRCRAFT_MASS, 250, WeaponsManager::SM_MISSILE, WeaponsManager::LG_BOMB, AircraftEnemy::PEEKABOO_L);
 		break;
 	case Enemy_SU47:
-		plane = new AircraftEnemy("images/aircraft/enemy/SU47.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_LIGHT_AIRCRAFT_MASS, 600, WeaponsManager::MED_LASER, WeaponsManager::MED_LASER, AircraftEnemy::DIAGONAL_BACK_AND_FORTH);
+		plane = new AircraftEnemy("images/aircraft/enemy/SU47.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_LIGHT_AIRCRAFT_MASS, 600, WeaponsManager::SM_LASER, WeaponsManager::SM_LASER, AircraftEnemy::DIAGONAL_BACK_AND_FORTH);
 		break;
 	case Enemy_Zero:
-		plane = new AircraftEnemy("images/aircraft/enemy/Zero.png", Aircraft::AVG_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 50, WeaponsManager::MED_LASER, WeaponsManager::MED_LASER, AircraftEnemy::LEFT_AND_RIGHT);
+		plane = new AircraftEnemy("images/aircraft/enemy/Zero.png", Aircraft::AVG_AIRCRAFT_SPEED, Aircraft::AVG_AIRCRAFT_MASS, 50, WeaponsManager::MED_BULLET, WeaponsManager::SM_BOMB, AircraftEnemy::LEFT_AND_RIGHT);
 		break;
 	case Player_J31:
 		plane = new AircraftPlayer("images/aircraft/player/J31Yellow.png", Aircraft::VERY_FAST_AIRCRAFT_SPEED, Aircraft::VERY_LIGHT_AIRCRAFT_MASS, 600, WeaponsManager::SM_BULLET, WeaponsManager::SM_BOMB);

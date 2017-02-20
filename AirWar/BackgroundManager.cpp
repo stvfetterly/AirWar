@@ -8,7 +8,7 @@ sf::Texture BackgroundManager::_backgroundImage[NUM_BACKGROUNDS];
 sf::Sprite BackgroundManager::_background;
 sf::Sprite BackgroundManager::_backgroundInv;
 
-const float BackgroundManager::TIME_BETWEEN_CLOUDS = 30;
+const float BackgroundManager::TIME_BETWEEN_CLOUDS = 10;
 float BackgroundManager::_cloudTimer = 0.0;
 float BackgroundManager::_backgroundImagePixels = Game::SCREEN_HEIGHT;
 bool BackgroundManager::_backgroundInverted = false;
@@ -41,7 +41,7 @@ void BackgroundManager::GenerateClouds(const float& timeChange)
 		_cloudTimer = TIME_BETWEEN_CLOUDS;
 
 		//Make a cloud
-		Cloud* newCloud = new Cloud(Cloud::Light, 1.0f);
+		Cloud* newCloud = new Cloud(Cloud::Light, 0.7f);
 
 		//Make it a particular size
 		//newCloud->GetSprite().setScale()
@@ -51,8 +51,10 @@ void BackgroundManager::GenerateClouds(const float& timeChange)
 
 		//Set it just off the upper left of the screen
 //		newCloud->SetPosition( -newCloud->GetWidth() / 2.0f, -newCloud->GetHeight() / 2.0f );
-		//Set cloud at top of screen
-		newCloud->SetPosition(Game::SCREEN_WIDTH / 2, -newCloud->GetHeight() / 2.0f);
+		//Set cloud at top middle of screen
+		float width = Game::SCREEN_WIDTH/2;//-newCloud->GetWidth() / 1.5f;
+		float height = 0.0 - newCloud->GetHeight() / 1.5;
+		newCloud->SetPosition(width, height);
 		//newCloud->SetPosition(Game::SCREEN_WIDTH, Game::SCREEN_HEIGHT);
 
 		Game::GetGameObjectManager().Add(newCloud);

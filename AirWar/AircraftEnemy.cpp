@@ -20,8 +20,8 @@ AircraftEnemy::AircraftEnemy(const std::string& image,
 
 	_stun = 0.0f;
 	_autoFire = 0.0f;
-	_rateOfFire = 0.0f;
-	_rateOfFire2 = 0.0f;
+	_rateOfFire = WeaponsManager::GetRateOfFire(_weaponType) * 4.0f;
+	_rateOfFire2 = WeaponsManager::GetRateOfFire(_weaponType2) * 4.0f;;
 
 	_type = ControlType::AIEnemy;
 
@@ -42,8 +42,23 @@ AircraftEnemy::~AircraftEnemy()
 {
 }
 
+void AircraftEnemy::Damage(const float& damageAmount)
+{
+	_health -= damageAmount;
+
+	//Update the enemy colour to indicate damage
+	int redDamage = static_cast<int>(255 * (_health / _fullHealth));
+	GetSprite().setColor(sf::Color(255, redDamage, redDamage, 255));
+
+	if (_health < 0)
+		Explode();
+}
+
 void AircraftEnemy::Update(const float& elapsedTime)
 {
+	//Check if we should be firing
+	FiringRules(elapsedTime);
+
 	//Check for collisions/damage
 	DamageDetection();
 
@@ -218,5 +233,39 @@ void AircraftEnemy::EnforceSpeedLimit()
 
 void AircraftEnemy::FiringRules(const float& elapsedTime)
 {
+	float xVel = 0.0;
+	float yVel = 0.0;
+	float angle = GetAngleInDegrees() * static_cast<float>(M_PI / 180.0f);	//convert angle to radians
 
+	//Primary fire
+	if (_rateOfFire <= 0.0)
+	{
+		//Fire based on plane angle
+		xVel = std::sinf(angle) * WeaponsManager::GetWeaponSpeed(_weaponType);
+		yVel = std::cosf(angle) * WeaponsManager::GetWeaponSpeed(_weaponType);
+		Fire(xVel, yVel, _weaponType);
+		_rateOfFire = WeaponsManager::GetRateOfFire(_weaponType) *4.0f;		//force enemy planes to fire more slowly
+	}
+	else
+	{
+		_rateOfFire -= elapsedTime;
+	}
+
+	//Secondary Fire
+	if (_rateOfFire2 <= 0.0)
+	{
+		//Fire from behind for secondary fire
+		angle = 360.0f - angle;
+
+		//Fire based on plane angle
+		xVel = std::sinf(angle) * WeaponsManager::GetWeaponSpeed(_weaponType2);
+		yVel = std::cosf(angle) * WeaponsManager::GetWeaponSpeed(_weaponType2);
+		Fire(xVel, yVel, _weaponType2);
+
+		_rateOfFire2 = WeaponsManager::GetRateOfFire(_weaponType2) * 4.0f;				//force enemy planes to fire more slowly
+	}
+	else
+	{
+		_rateOfFire2 -= elapsedTime;
+	}
 }

@@ -75,17 +75,17 @@ void Cloud::Init()
 	switch (_type)
 	{
 	case Dark:
-		darkness = static_cast<int>(darkness * 0.3f);
+		darkness = static_cast<int>(darkness * 0.6f);
 		break;
 	case Med:
-		darkness = static_cast<int>(darkness * 0.6f);
+		darkness = static_cast<int>(darkness * 0.8f);
 		break;
 	case Light:
 		break;
 	}
 
 	//Set the opacity and darkness of the cloud
-//	GetSprite().setColor(sf::Color(darkness, darkness, darkness, 255 - opacity));
+	GetSprite().setColor(sf::Color(darkness, darkness, darkness, opacity));
 
 	//Set sprite origin
 	GetSprite().setOrigin(GetSprite().getGlobalBounds().width / 2,
@@ -106,8 +106,8 @@ void Cloud::Update(const float& elapsedTime)
 {
 	//Clouds match the speed of the background image
 	//SetYVelocity((BackgroundManager::SPEED_OF_BACKGROUND_IMAGE / 10) * elapsedTime);
-	SetYVelocity(30.0f);
-	SetXVelocity(5.0f);
+	SetYVelocity(BackgroundManager::SPEED_OF_BACKGROUND_IMAGE / 2.0f);
+	//SetXVelocity(30.0f);
 
 	//Update location
 	GetSprite().move(GetXVelocity() * elapsedTime, GetYVelocity() * elapsedTime);

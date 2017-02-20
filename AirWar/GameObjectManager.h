@@ -21,6 +21,7 @@ public:
 	void AddToDeletionQueue(const std::string& newItem) { _deletionQueue.push_back(newItem); }
 
 	std::map<std::string, sf::Texture>& GetObjectTextureMap() { return _textureMap; }
+	void CacheTexture(const std::string& filename);
 
 private:
 	std::map<std::string, VisibleGameObject*> _gameObjects;

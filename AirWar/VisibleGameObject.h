@@ -35,7 +35,7 @@ public:
 
 	bool IsVisible() { return _visible; }
 	void SetVisible(bool visible) { _visible = visible; }
-	
+	float GetAngleInDegrees();
 
 protected:
 	sf::Sprite& GetSprite();
@@ -51,8 +51,8 @@ private:
 	static int numObjects;
 
 	sf::Sprite _sprite;
-	sf::Texture _image;
-	std::string _filename;
+	sf::Texture* _image;
+
 	bool _isLoaded;
 	bool _visible;
 };

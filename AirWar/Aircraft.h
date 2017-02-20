@@ -28,7 +28,7 @@ public:
 
 	//Plane actions
 	void Fire(const float& xVel, const float& yVel, const WeaponsManager::WeaponType& weaponType);
-	void Damage(const float& damageAmount);
+	virtual void Damage(const float& damageAmount);
 	void Stun(const float& stunTime);
 	bool IsStunned(const float& elapsedTime);
 	void Explode();

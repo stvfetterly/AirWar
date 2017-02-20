@@ -5,7 +5,7 @@
 int VisibleGameObject::numObjects = 0;
 
 //Default constructor - initialize variables
-VisibleGameObject::VisibleGameObject() : _isLoaded(false), _filename(""), _isPaused(false), _xVelocity(0.0), _yVelocity(0.0), _visible(true)
+VisibleGameObject::VisibleGameObject() : _isLoaded(false), _isPaused(false), _xVelocity(0.0), _yVelocity(0.0), _visible(true), _image(NULL)
 {
 	_name = "VisibleGameObject" + std::to_string(numObjects);
 	numObjects++;
@@ -18,29 +18,31 @@ VisibleGameObject::~VisibleGameObject()
 
 void VisibleGameObject::Load(const std::string& filename)
 {
+/*	//Now that we know an image exists in the texture map, point to it and use it
+	_image = &(Game::GetGameObjectManager().GetObjectTextureMap()[filename]);
+	assert(_image != NULL);	//if we're trying to load an image that doesn't exist, we've got a big problem
+	_sprite.setTexture(*_image, true);
+	_isLoaded = true;
+	*/
+
 	//If a texture doesn't exist then load from file
 	if (Game::GetGameObjectManager().GetObjectTextureMap().count(filename) == 0)
 	{
+		sf::Texture image;
+
 		//if we fail to load the image, reset variables
-		if (_image.loadFromFile(filename) == false)
+		if (image.loadFromFile(filename) == false)
 		{
-			_filename = "";
 			_isLoaded = false;
 			return;
 		}
-		else //Loads the image
+		else //Saves image into texture map
 		{
-			Game::GetGameObjectManager().GetObjectTextureMap().insert(std::pair<std::string, sf::Texture>(_filename, _image));
-			_sprite.setTexture(_image, true);
+			Game::GetGameObjectManager().GetObjectTextureMap().insert(std::pair<std::string, sf::Texture>(filename, image));
 		}
 	}
-	else
-	{
-		_image = Game::GetGameObjectManager().GetObjectTextureMap()[filename];
-		_sprite.setTexture(_image, true);
-	}
-
-	_filename = filename;
+	_image = &Game::GetGameObjectManager().GetObjectTextureMap()[filename];
+	_sprite.setTexture(*_image, true);
 	_isLoaded = true;
 }
 
@@ -88,40 +90,24 @@ bool VisibleGameObject::IsLoaded() const
 
 float VisibleGameObject::GetHeight() const
 {
-	return _sprite.getLocalBounds().height;
+	return _sprite.getGlobalBounds().height;
 }
 
 float VisibleGameObject::GetWidth() const
 {
-	return _sprite.getLocalBounds().width;
+	return _sprite.getGlobalBounds().width;
 }
 
 //Returns a rectangle that contains the object
 sf::Rect<float> VisibleGameObject::GetBoundingRect() const
 {
-/*	sf::Vector2f size;
-	size.x = GetWidth();
-	size.y = GetHeight();
-
-	sf::Vector2f centerPos;
-	centerPos.x = _sprite.getOrigin().x;
-	centerPos.y = _sprite.getOrigin().y;
-
-	return sf::Rect<float>( centerPos.x - size.x/2,
-							centerPos.y - size.x/2,
-							centerPos.x + size.x/2,
-							centerPos.y + size.y/2);
-							**/
-
 	return _sprite.getGlobalBounds();
 }
 
-void VisibleGameObject::UpdateDirection()
+float VisibleGameObject::GetAngleInDegrees()
 {
-	sf::Sprite& thisSprite = GetSprite();
-
 	//Set correct angle algorithm
-	float theta = 0;
+	static float theta = 0;
 
 	//If the object is heading up then just use normal sin
 	if (_yVelocity <= 0)
@@ -133,7 +119,7 @@ void VisibleGameObject::UpdateDirection()
 		if (hypotenuse == 0)
 		{
 			//Do nothing to rotation
-			return;
+			return theta;
 		}
 		else
 		{
@@ -145,11 +131,11 @@ void VisibleGameObject::UpdateDirection()
 		//Object is heading down, so to get correct angle of rotation we need to subtract it from 180
 	{
 		float hypotenuse = std::sqrtf(_xVelocity*_xVelocity + _yVelocity*_yVelocity);
-		
+
 		if (hypotenuse == 0)
 		{
 			//Do nothing to rotation, the object is not moving
-			return;
+			return theta;
 		}
 		else
 		{
@@ -159,5 +145,11 @@ void VisibleGameObject::UpdateDirection()
 
 		theta = 180 - theta;
 	}
-	thisSprite.setRotation(theta);
+
+	return theta;
+}
+
+void VisibleGameObject::UpdateDirection()
+{
+	GetSprite().setRotation(GetAngleInDegrees());
 }

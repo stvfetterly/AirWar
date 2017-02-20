@@ -20,6 +20,7 @@ public:
 	AircraftEnemy(const std::string& image, float maxVelocity, float mass, float health, WeaponsManager::WeaponType weaponType, WeaponsManager::WeaponType weaponType2, AI_Type type);
 	~AircraftEnemy();
 	void Update(const float& elapsedTime);			//Updates plane position
+	void Damage(const float& damageAmount);
 
 private:
 	enum PeekABooType{TOP, BOTTOM, LEFT, RIGHT};
