@@ -6,9 +6,8 @@ class Cloud : public VisibleGameObject
 public:
 	enum CloudType
 	{
-		Dark,
-		Med,
-		Light
+		Big,
+		Small
 	};
 
 	Cloud(CloudType type, float _opacity);
@@ -21,12 +20,13 @@ public:
 
 private:
 	static int totalNumClouds;
+	static const float CONTRAIL_DEL_TIME;
 
 	CloudType _type;
 
-	float _rotation;		//From 0 - 359
 	float _opacity;			//From 0 - 1
 	float _BGmultiplier;	//Controls how fast the cloud will go, compared to the background speed
+	float _contrailDeletionTime;	//Amount of time before a contrail is deleted
 
 	void Init();
 };

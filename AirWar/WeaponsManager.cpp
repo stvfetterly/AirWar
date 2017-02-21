@@ -4,7 +4,7 @@
 #include "Weapon.h"
 
 
-WeaponsManager::WeaponsManager()
+WeaponsManager::WeaponsManager(): _curContrailToUse(0)
 {
 	CreateAllOrdnance();
 }
@@ -45,6 +45,27 @@ VisibleGameObject* WeaponsManager::GetWeapon(WeaponType type)
 		return returnObj;
 	}
 }
+
+Cloud* WeaponsManager::GetContrail()
+{
+	if (_curContrailToUse < _contrailCache.size() - 1)
+	{
+		_curContrailToUse++;
+	}
+	else
+	{
+		_curContrailToUse = 0;
+	}
+
+	//unpause the object
+	_contrailCache[_curContrailToUse]->Pause(false);
+
+	//make object visible
+	_contrailCache[_curContrailToUse]->SetVisible(true);
+
+	return _contrailCache[_curContrailToUse];
+}
+
 void WeaponsManager::HideObject(VisibleGameObject* objToHide)
 {
 	//Hide the object well off screen
@@ -59,19 +80,49 @@ void WeaponsManager::HideObject(VisibleGameObject* objToHide)
 
 void  WeaponsManager::CreateAllOrdnance()
 {
-	//Create a large pool of all types of of weapons for later use
-	for (int i = 0; i < WEAPON_NUM; i++)
+	//For each type of weapon, make an object
+	for (int j = 0; j < TOTAL_WEAPONS; j++)
 	{
-		//For each type of weapon, make an object
-		for (int j = 0; j < TOTAL_WEAPONS; j++)
+		WeaponType type = static_cast<WeaponType>(j);
+
+		//Special cases - we want more weapons for each of the small items, less weapons for each of the large ones
+		int number_of_weapons_created = WEAPON_NUM;
+
+		switch (type)
 		{
-			Weapon* newWeapon = new Weapon(0.0f, 0.0f, static_cast<WeaponType>(j));				//Create the new weapon
+		case SM_BOMB:
+		case SM_BULLET:
+		case SM_LASER:
+		case SM_MISSILE:
+			number_of_weapons_created *= 2;
+			break;
+		case LG_BOMB:
+		case LG_BULLET:
+		case LG_LASER:
+		case LG_MISSILE:
+			number_of_weapons_created /= 2;
+			break;
+		}
+
+		//Create a large pool of all types of of weapons for later use
+		for (int i = 0; i < WEAPON_NUM; i++)
+		{
+			Weapon* newWeapon = new Weapon(0.0f, 0.0f, type);				//Create the new weapon
 			HideObject(newWeapon);										//Move the weapon off screen and pause it
 			_weaponNameMap[static_cast<WeaponType>(j)].push_back(newWeapon->GetName());	//Add the name of the weapon to our list
 
 			//Add the weapon to the object manager
 			const_cast<GameObjectManager&> (Game::GetGameObjectManager()).Add(newWeapon);
 		}
+	}
+
+	for (int i = 0; i < CONTRAIL_NUM; i++)
+	{
+		Cloud* newContrail = new Cloud(Cloud::Small, 1.0f);
+		HideObject(newContrail);
+		_contrailCache.push_back(newContrail);
+
+		Game::GetGameObjectManager().AddDecoration(newContrail);
 	}
 }
 

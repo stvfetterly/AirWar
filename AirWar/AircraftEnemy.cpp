@@ -3,6 +3,8 @@
 #include "Game.h"
 
 int AircraftEnemy::numEnemies = 0;
+float AircraftEnemy::weaponFireReductionRate = 5.0f;
+float AircraftEnemy::weaponFireVelocityReduction = 4.0f;
 
 AircraftEnemy::AircraftEnemy(const std::string& image,
 							float maxVelocity, float mass, float health, 
@@ -20,8 +22,8 @@ AircraftEnemy::AircraftEnemy(const std::string& image,
 
 	_stun = 0.0f;
 	_autoFire = 0.0f;
-	_rateOfFire = WeaponsManager::GetRateOfFire(_weaponType) * 4.0f;
-	_rateOfFire2 = WeaponsManager::GetRateOfFire(_weaponType2) * 4.0f;;
+	_rateOfFire = WeaponsManager::GetRateOfFire(_weaponType) * weaponFireReductionRate;
+	_rateOfFire2 = WeaponsManager::GetRateOfFire(_weaponType2) * weaponFireReductionRate;
 
 	_type = ControlType::AIEnemy;
 
@@ -240,11 +242,11 @@ void AircraftEnemy::FiringRules(const float& elapsedTime)
 	//Primary fire
 	if (_rateOfFire <= 0.0)
 	{
-		//Fire based on plane angle
-		xVel = std::sinf(angle) * WeaponsManager::GetWeaponSpeed(_weaponType);
-		yVel = std::cosf(angle) * WeaponsManager::GetWeaponSpeed(_weaponType);
+		//Fire based on plane angle, but make weapons fire more slowly
+		xVel = std::sinf(angle) * WeaponsManager::GetWeaponSpeed(_weaponType) / weaponFireVelocityReduction;
+		yVel = std::cosf(angle) * WeaponsManager::GetWeaponSpeed(_weaponType) / weaponFireVelocityReduction;
 		Fire(xVel, yVel, _weaponType);
-		_rateOfFire = WeaponsManager::GetRateOfFire(_weaponType) *4.0f;		//force enemy planes to fire more slowly
+		_rateOfFire = WeaponsManager::GetRateOfFire(_weaponType) * weaponFireReductionRate;		//force enemy planes to fire more slowly
 	}
 	else
 	{
@@ -255,14 +257,14 @@ void AircraftEnemy::FiringRules(const float& elapsedTime)
 	if (_rateOfFire2 <= 0.0)
 	{
 		//Fire from behind for secondary fire
-		angle = (360 * M_PI / 180) - angle;
+		angle = static_cast<float>((360.0f * M_PI / 180.0f) - angle);
 
-		//Fire based on plane angle
-		xVel = std::sinf(angle) * WeaponsManager::GetWeaponSpeed(_weaponType2);
-		yVel = std::cosf(angle) * WeaponsManager::GetWeaponSpeed(_weaponType2);
+		//Fire based on plane angle but make weapons fire more slowly
+		xVel = std::sinf(angle) * WeaponsManager::GetWeaponSpeed(_weaponType2) / weaponFireVelocityReduction;
+		yVel = std::cosf(angle) * WeaponsManager::GetWeaponSpeed(_weaponType2) / weaponFireVelocityReduction;
 		Fire(xVel, yVel, _weaponType2);
 
-		_rateOfFire2 = WeaponsManager::GetRateOfFire(_weaponType2) * 4.0f;				//force enemy planes to fire more slowly
+		_rateOfFire2 = WeaponsManager::GetRateOfFire(_weaponType2) * weaponFireReductionRate;				//force enemy planes to fire more slowly
 	}
 	else
 	{

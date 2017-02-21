@@ -108,7 +108,7 @@ void Boom::LoadBooms(const BoomType& type)
 
 
 	totalNumBooms++;
-	_name = "Boom" + std::to_string(totalNumBooms);
+	_name = "ZBoom" + std::to_string(totalNumBooms);
 }
 
 void Boom::Update(const float& elapsedTime)
@@ -121,6 +121,7 @@ void Boom::Update(const float& elapsedTime)
 		{
 			Load(_fileNameList[_animationCellDisplayed]);
 		}
+
 
 		//Keep all sprite rotation the same randomly generated number
 		GetSprite().setRotation(_rotation);
@@ -139,11 +140,11 @@ void Boom::Update(const float& elapsedTime)
 	//Delete the boom once it has run it's course
 	if (_animationCellDisplayed >= _fileNameList.size())
 	{
-		Game::GetGameObjectManager().AddToDeletionQueue(_name);
+		Game::GetGameObjectManager().AddToDeletionDecorationQueue(_name);
 	}
 
 	//Update y velocity so that the booms scroll down the screen based on background speed
-	SetYVelocity(BackgroundManager::SPEED_OF_BACKGROUND_IMAGE * elapsedTime);
+	SetYVelocity(10 * elapsedTime);
 
 	//Update location
 	GetSprite().move(GetXVelocity() * elapsedTime, GetYVelocity() * elapsedTime);

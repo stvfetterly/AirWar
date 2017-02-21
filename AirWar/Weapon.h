@@ -2,6 +2,7 @@
 
 #include "VisibleGameObject.h"
 #include "WeaponsManager.h"
+#include "Cloud.h"
 
 class Weapon : public VisibleGameObject
 {
@@ -26,9 +27,11 @@ public:
 	WeaponsManager::WeaponType GetType() { return _type; }
 
 private:
+	static const float CONTRAIL_APP_TIME;
+	
 	float _damage;			//Amount of damage that a weapon will do
 	static int numWeapons;
 	WeaponsManager::WeaponType _type;
 	FiredFrom _firedFrom;
-
+	float _contrailAppearanceTime;	//Amount of time before the next part of the contrail appears
 };

@@ -24,6 +24,15 @@ GameObjectManager::GameObjectManager() : _paused(false)
 	CacheTexture("images/Clouds/Cloud9.png");
 	CacheTexture("images/Clouds/Cloud10.png");
 	CacheTexture("images/Clouds/Cloud11.png");
+	CacheTexture("images/Clouds/CloudSM1.png");
+	CacheTexture("images/Clouds/CloudSM2.png");
+	CacheTexture("images/Clouds/CloudSM3.png");
+	CacheTexture("images/Clouds/CloudSM4.png");
+	CacheTexture("images/Clouds/CloudSM5.png");
+	CacheTexture("images/Clouds/CloudSM6.png");
+	CacheTexture("images/Clouds/CloudSM7.png");
+	CacheTexture("images/Clouds/CloudSM8.png");
+	CacheTexture("images/Clouds/CloudSM9.png");
 
 	//Booms
 	CacheTexture("images/Booms/Boom1.png");
@@ -111,6 +120,7 @@ GameObjectManager::GameObjectManager() : _paused(false)
 GameObjectManager::~GameObjectManager()
 {
 	std::for_each(_gameObjects.begin(), _gameObjects.end(), GameObjectDeallocator());
+	std::for_each(_decorationObjects.begin(), _decorationObjects.end(), GameObjectDeallocator());
 }
 
 void GameObjectManager::CacheTexture(const std::string& filename)
@@ -125,6 +135,10 @@ void GameObjectManager::Add(VisibleGameObject* gameObject)
 {
 	_gameObjects.insert(std::pair<std::string, VisibleGameObject*>(gameObject->GetName(), gameObject));
 }
+void GameObjectManager::AddDecoration(VisibleGameObject* gameObject)
+{
+	_decorationObjects.insert(std::pair<std::string, VisibleGameObject*>(gameObject->GetName(), gameObject));
+}
 
 //Deletes item from map if found
 void GameObjectManager::Remove(const std::string& name)
@@ -136,6 +150,17 @@ void GameObjectManager::Remove(const std::string& name)
 	{
 		delete results->second;
 		_gameObjects.erase(results);
+	}
+}
+void GameObjectManager::RemoveDecoration(const std::string& name)
+{
+	std::map<std::string, VisibleGameObject*>::iterator results = _decorationObjects.find(name);
+
+	//If we've found the item to remove, remove it
+	if (results != _decorationObjects.end())
+	{
+		delete results->second;
+		_decorationObjects.erase(results);
 	}
 }
 
@@ -152,15 +177,31 @@ VisibleGameObject* GameObjectManager::Get(const std::string& name) const
 
 	return results->second;
 }
-
-int GameObjectManager::GetObjectCount() const
+VisibleGameObject* GameObjectManager::GetDecoration(const std::string& name) const
 {
-	return _gameObjects.size();
+	std::map<std::string, VisibleGameObject*>::const_iterator results = _decorationObjects.find(name);
+
+	//if we've failed to find the object, return NULL
+	if (results == _decorationObjects.end())
+	{
+		return NULL;
+	}
+
+	return results->second;
 }
 
 //Updates the display of items being managed
 void GameObjectManager::DrawAll(sf::RenderWindow& renderWindow)
 {
+	for (auto itr = _decorationObjects.begin(); itr != _decorationObjects.end(); ++itr)
+	{
+		//Don't waste time drawing stuff that's invisible
+		if (itr->second->IsVisible())
+		{
+			itr->second->Draw(renderWindow);
+		}
+	}
+
 	for (auto itr = _gameObjects.begin(); itr != _gameObjects.end(); ++itr)
 	{
 		//Don't waste time drawing stuff that's invisible
@@ -186,7 +227,16 @@ void GameObjectManager::UpdateAll()
 		}
 	}
 
-	//Check the deletion queue
+	for (auto itr = _decorationObjects.begin(); itr != _decorationObjects.end(); ++itr)
+	{
+		//Only update items if they aren't paused
+		if (itr->second->IsPaused() == false)
+		{
+			itr->second->Update(timeDelta);
+		}
+	}
+
+	//Check the deletion queues
 	if (_deletionQueue.size() > 0)
 	{
 		//remove each item queued up to be deleted when it's safe to do so
@@ -195,6 +245,15 @@ void GameObjectManager::UpdateAll()
 			Remove(*itr);
 		}
 		_deletionQueue.clear();
+	}
+	if (_deletionDecorationQueue.size() > 0)
+	{
+		//remove each item queued up to be deleted when it's safe to do so
+		for (auto itr = _deletionDecorationQueue.begin(); itr < _deletionDecorationQueue.end(); ++itr)
+		{
+			RemoveDecoration(*itr);
+		}
+		_deletionDecorationQueue.clear();
 	}
 
 	if (!_paused)
@@ -210,6 +269,14 @@ void GameObjectManager::SetPause(bool pause)
 	{
 		//Pause/Unpause everything on screen!
 		for (auto itr = _gameObjects.begin(); itr != _gameObjects.end(); ++itr)
+		{
+			if (itr->second->IsVisible())
+			{
+				itr->second->Pause(pause);
+			}
+		}
+
+		for (auto itr = _decorationObjects.begin(); itr != _decorationObjects.end(); ++itr)
 		{
 			if (itr->second->IsVisible())
 			{

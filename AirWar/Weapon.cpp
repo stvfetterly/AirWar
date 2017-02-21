@@ -4,8 +4,9 @@
 #include "Game.h"
 
 int Weapon::numWeapons = 0;
+const float Weapon::CONTRAIL_APP_TIME = 0.01f;
 
-Weapon::Weapon(float xVel, float yVel, WeaponsManager::WeaponType type) : _damage(0.0), _type(type), _firedFrom(ENEMY)
+Weapon::Weapon(float xVel, float yVel, WeaponsManager::WeaponType type) : _damage(0.0), _type(type), _firedFrom(ENEMY), _contrailAppearanceTime(CONTRAIL_APP_TIME)
 {
 	const float missileDamage = 70;
 	const float bombDamage = 100;
@@ -21,62 +22,62 @@ Weapon::Weapon(float xVel, float yVel, WeaponsManager::WeaponType type) : _damag
 	case WeaponsManager::SM_MISSILE:
 		Load("images/Ordnance/Missile.png");
 		_damage = missileDamage;
-		_name = "Missile";
+		_name = "YMissile";
 		break;
 	case WeaponsManager::MED_MISSILE:
 		Load("images/Ordnance/Missile2.png");
 		_damage = missileDamage*2;
-		_name = "Missile";
+		_name = "YMissile";
 		break;
 	case WeaponsManager::LG_MISSILE:
 		Load("images/Ordnance/Missile3.png");
 		_damage = missileDamage * 4;
-		_name = "Missile";
+		_name = "YMissile";
 		break;
 	case WeaponsManager::SM_BULLET:
 		Load("images/Ordnance/Bullet.png");
 		_damage = bulletDamage;
-		_name = "Bullet";
+		_name = "YBullet";
 		break;
 	case WeaponsManager::MED_BULLET:
 		Load("images/Ordnance/Bullet2.png");
 		_damage = bulletDamage * 2;
-		_name = "Bullet";
+		_name = "YBullet";
 		break;
 	case WeaponsManager::LG_BULLET:
 		Load("images/Ordnance/Bullet3.png");
 		_damage = bulletDamage * 4;
-		_name = "Bullet";
+		_name = "YBullet";
 		break;
 	case WeaponsManager::SM_BOMB:
 		Load("images/Ordnance/Bomb.png");
 		_damage = bombDamage;
-		_name = "Bomb";
+		_name = "YBomb";
 		break;
 	case WeaponsManager::MED_BOMB:
 		Load("images/Ordnance/Bomb2.png");
 		_damage = bombDamage*2;
-		_name = "Bomb";
+		_name = "YBomb";
 		break;
 	case WeaponsManager::LG_BOMB:
 		Load("images/Ordnance/Bomb3.png");
 		_damage = bombDamage*4;
-		_name = "Bomb";
+		_name = "YBomb";
 		break;
 	case WeaponsManager::SM_LASER:
-		_name = "Laser";
+		_name = "YLaser";
 		_damage = laserDamage;
 		Load("images/Ordnance/Laser.png");
 		break;
 	case WeaponsManager::MED_LASER:
 		Load("images/Ordnance/Laser2.png");
 		_damage = laserDamage*2;
-		_name = "Laser";
+		_name = "YLaser";
 		break;
 	case WeaponsManager::LG_LASER:
 		Load("images/Ordnance/Laser3.png");
 		_damage = laserDamage*4;
-		_name = "Laser";
+		_name = "YLaser";
 		break;
 	case WeaponsManager::TOTAL_WEAPONS:
 		//TODO: Should never get here
@@ -118,6 +119,18 @@ void Weapon::Update(const float& elapsedTime)
 	{
 		SetXVelocity(GetXVelocity() * (1 + elapsedTime));
 		SetYVelocity(GetYVelocity() * (1 + elapsedTime));
+
+		//Missiles have contrails
+		if (_contrailAppearanceTime <= 0.0f)
+		{
+			_contrailAppearanceTime = CONTRAIL_APP_TIME;
+			Cloud* newContrail = Game::GetWeaponsManager().GetContrail();
+			newContrail->SetPosition(this->GetPosition().x, this->GetPosition().y);
+		}
+		else
+		{
+			_contrailAppearanceTime -= elapsedTime;
+		}
 	}
 
 	//Update location

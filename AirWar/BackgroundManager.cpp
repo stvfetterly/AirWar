@@ -41,7 +41,7 @@ void BackgroundManager::GenerateClouds(const float& timeChange)
 		_cloudTimer = TIME_BETWEEN_CLOUDS;
 
 		//Make a cloud
-		Cloud* newCloud = new Cloud(Cloud::Light, 0.7f);
+		Cloud* newCloud = new Cloud(Cloud::Big, 0.7f);
 
 		//Make it a particular size
 		//newCloud->GetSprite().setScale()
@@ -53,11 +53,11 @@ void BackgroundManager::GenerateClouds(const float& timeChange)
 //		newCloud->SetPosition( -newCloud->GetWidth() / 2.0f, -newCloud->GetHeight() / 2.0f );
 		//Set cloud at top middle of screen
 		float width = Game::SCREEN_WIDTH/2;//-newCloud->GetWidth() / 1.5f;
-		float height = 0.0 - newCloud->GetHeight() / 1.5;
+		float height = 0.0f - newCloud->GetHeight() / 1.5f;
 		newCloud->SetPosition(width, height);
 		//newCloud->SetPosition(Game::SCREEN_WIDTH, Game::SCREEN_HEIGHT);
 
-		Game::GetGameObjectManager().Add(newCloud);
+		Game::GetGameObjectManager().AddDecoration(newCloud);
 	}
 	else
 	{

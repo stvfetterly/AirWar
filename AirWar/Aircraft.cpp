@@ -4,7 +4,7 @@
 #include "Game.h"
 #include "Boom.h"
 
-const float Aircraft::COLLISION_DAMAGE = 10.0f;
+const float Aircraft::COLLISION_DAMAGE = 0.1f;
 
 const float Aircraft::VERY_FAST_AIRCRAFT_SPEED = 1400.0f;
 const float Aircraft::FAST_AIRCRAFT_SPEED = 1200.0f;
@@ -82,7 +82,7 @@ void Aircraft::Explode()
 	//Add the boom
 	Boom* explodePlane = new Boom();
 	explodePlane->SetPosition(GetPosition().x, GetPosition().y);
-	Game::GetGameObjectManager().Add(explodePlane);
+	Game::GetGameObjectManager().AddDecoration(explodePlane);
 }
 
 bool Aircraft::IsStunned(const float& elapsedTime)

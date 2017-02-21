@@ -24,6 +24,9 @@ public:
 
 private:
 	enum PeekABooType{TOP, BOTTOM, LEFT, RIGHT};
+	
+	static float weaponFireReductionRate;
+	static float weaponFireVelocityReduction;
 
 	void MoveUpAndDown(int topEdge, int bottomEdge);
 	void MoveLeftAndRight(int leftEdge, int rightEdge);

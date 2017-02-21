@@ -30,7 +30,7 @@ AircraftPlayer::AircraftPlayer(const std::string& image,
 	GetSprite().setOrigin(GetSprite().getGlobalBounds().width / 2,
 		GetSprite().getGlobalBounds().height / 2);
 
-	_name = "Player";
+	_name = "ZPlayer";
 
 	//Set player to appear in middle of screen
 	SetPosition(Game::SCREEN_WIDTH / 2, Game::SCREEN_HEIGHT / 2);

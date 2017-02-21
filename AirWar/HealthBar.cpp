@@ -54,7 +54,7 @@ void HealthBar::AddToObjectManager()
 void HealthBar::Update(const float& elapsedTime)
 {
 	//Get the player aircraft
-	AircraftPlayer* player = dynamic_cast<AircraftPlayer*>(Game::GetGameObjectManager().Get("Player"));
+	AircraftPlayer* player = dynamic_cast<AircraftPlayer*>(Game::GetGameObjectManager().Get("ZPlayer"));
 
 	if (NULL != player)
 	{

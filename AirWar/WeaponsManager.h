@@ -1,5 +1,6 @@
 #pragma once
 #include "VisibleGameObject.h"
+#include "Cloud.h"
 
 class WeaponsManager
 {
@@ -29,12 +30,17 @@ public:
 	void HideObject(VisibleGameObject* objToHide);
 	static float GetRateOfFire(const WeaponType& weapon);
 	static float GetWeaponSpeed(const WeaponType& weapon);
+	Cloud* GetContrail();
 
 private:
-	static const int WEAPON_NUM = 20;
+	static const int WEAPON_NUM = 30;
+	static const int CONTRAIL_NUM = 700;
 
 	std::map<WeaponType, std::vector<std::string>> _weaponNameMap;		//Keeps track of the names of all the weapons available
 	std::map<WeaponType, unsigned int> _curWeaponToUse;					//Keeps track of the next weapon to use
+
+	std::vector<Cloud*> _contrailCache;					//Keeps track of all the contrails available for missiles
+	unsigned int _curContrailToUse;						//Keeps track of the next contrail to use
 
 	void CreateAllOrdnance();
 };

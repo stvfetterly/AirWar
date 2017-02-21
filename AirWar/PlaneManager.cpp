@@ -78,7 +78,7 @@ Aircraft* PlaneManager::CreatePlane(PlaneManager::PlaneType type)
 		//If the player has gone back to the main menu to select a different plane, 
 		//update the health of this new plane to match the percentage of the previous one
 		//that was used, and the position
-		AircraftPlayer* oldPlane = dynamic_cast<AircraftPlayer*>(Game::GetGameObjectManager().Get("Player"));
+		AircraftPlayer* oldPlane = dynamic_cast<AircraftPlayer*>(Game::GetGameObjectManager().Get("ZPlayer"));
 		if (oldPlane != NULL)
 		{
 			float healthPercentage = oldPlane->GetHealth() / oldPlane->GetFullHealth();
@@ -86,7 +86,7 @@ Aircraft* PlaneManager::CreatePlane(PlaneManager::PlaneType type)
 			plane->SetPosition(oldPlane->GetPosition().x, oldPlane->GetPosition().y);
 
 			//Remove the old plane
-			Game::GetGameObjectManager().Remove("Player");
+			Game::GetGameObjectManager().Remove("ZPlayer");
 		}
 		//If we're making a new Player plane and the old one is blown up or gone, then set the plane in the middle of the screen
 		else
