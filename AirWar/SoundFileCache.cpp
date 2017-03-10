@@ -7,17 +7,43 @@ std::map<std::string, sf::Music*> SoundFileCache::_music;
 SoundFileCache::SoundFileCache(void)
 {
 	//Load commonly used sounds into cache upon creation to avoid delays during gameplay
-/*	AddSound("sounds/Bounce.wav");
-	AddSound("sounds/Bounce2.wav");
-	AddSound("sounds/BounceHard.wav");
-	AddSound("sounds/CheerBig.wav");
-	AddSound("sounds/CheerBig2.wav");
-	AddSound("sounds/CheerBig3.wav");
-	AddSound("sounds/CheerSmall.wav");
-	AddSound("sounds/Click.wav");
-	AddSound("sounds/Inflate.wav");
-	AddSound("sounds/LaserBlast.wav");
-	AddSound("sounds/Boom.wav");*/
+	AddSound("sounds/CasingSound3.wav");
+	AddSound("sounds/Explosion.wav");
+	AddSound("sounds/Explosion1.wav");
+	AddSound("sounds/Explosion2.wav");
+	AddSound("sounds/Explosion3.wav");
+	AddSound("sounds/Explosion4.wav");
+	AddSound("sounds/ExplosionDouble.wav");
+	AddSound("sounds/ExplosionwPlaneNoise.wav");
+	AddSound("sounds/MultiShot.wav");
+	AddSound("sounds/MultiShot3.wav");
+	AddSound("sounds/Multishot5.wav");
+	AddSound("sounds/Multishot6.wav");
+	AddSound("sounds/Multishot8.wav");
+	AddSound("sounds/MultishotB.wav");
+	AddSound("sounds/MultiShotLaser6.wav");
+	AddSound("sounds/MultiShotMinigun.wav");
+	AddSound("sounds/PlaneNoise.wav");
+	AddSound("sounds/PlaneNoise2.wav");
+	AddSound("sounds/PlaneNoise3.wav");
+	AddSound("sounds/PlaneNoise4.wav");
+	AddSound("sounds/PlaneNoise5.wav");
+	AddSound("sounds/PlaneNoise6.wav");
+	AddSound("sounds/PlaneNoise7.wav");
+	AddSound("sounds/PlaneNoise8.wav");
+	AddSound("sounds/PlaneNoiseSquad.wav");
+	AddSound("sounds/RadioStatic.wav");
+	AddSound("sounds/RadioTune.wav");
+	AddSound("sounds/Reload1.wav");
+	AddSound("sounds/Reload2.wav");
+	AddSound("sounds/Rocket.wav");
+	AddSound("sounds/Rocket2.wav");
+	AddSound("sounds/Rocket3.wav");
+	AddSound("sounds/SingleShot.wav");
+	AddSound("sounds/SingleShot2.wav");
+	AddSound("sounds/SingleShot3.wav");
+	AddSound("sounds/SingleShot4.wav");
+	AddSound("sounds/SingleShotLaser.wav");
 }
 
 //Delete all the stuff we've created and saved in the maps
